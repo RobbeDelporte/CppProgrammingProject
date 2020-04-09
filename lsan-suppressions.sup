@@ -1,0 +1,6 @@
+leak:i965_dri
+leak:libxcb
+leak:libGLX
+leak:libX11
+leak:libpulse
+leak:liballegro.so
