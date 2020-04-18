@@ -51,8 +51,7 @@ int main(int argc, char** argv) {
 
     Allkit::Get().Init();
     
-    Menu menu;
-
+    Menu menu;    
     menu.Run();
 
     Allkit::Get().Destroy();
