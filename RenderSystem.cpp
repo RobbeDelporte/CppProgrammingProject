@@ -14,12 +14,12 @@ void RenderSystem::Update(){
         RenderSprite(sc);
     }
 
-    entities = es.WithTag(Component::BOX);
+    /*entities = es.WithTag(Component::BOX);
     for(Entity* entity: entities){
         Component* component = entity->GetComponent(Component::BOX);
         BoxComponent* bc = dynamic_cast<BoxComponent*>(component);
         RenderBox(bc);
-    }
+    }*/
 
     entities = es.WithTag(Component::MISSILE1);
     for(Entity* entity: entities){

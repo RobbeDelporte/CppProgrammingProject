@@ -18,6 +18,8 @@ class LauncherSystem : public System {
         Allkit* ak_ = NULL;
 
         bool Missile1Selected(Missile1Component*);
+
+        Point ConvertMouse(Point);
 };
 
 #endif
