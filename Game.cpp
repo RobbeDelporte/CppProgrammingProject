@@ -13,15 +13,15 @@ bool Game::Run() {
     while (!exit_)
     {
         ak_->NextEvent();
+
         if(ak_->IsWindowClosed()){
             exit_ = true;
-
         }
+        
         engine_.Update();
-
-        if(ak_->IsWindowClosed()){
-            exit_ = true;
-
+        
+        if(ak_->IsArrowKeyDownPushed()){
+            exit_= true;
         }
     }
     
