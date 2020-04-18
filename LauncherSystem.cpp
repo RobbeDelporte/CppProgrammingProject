@@ -23,19 +23,24 @@ void LauncherSystem::Update(){
         else if(m1c->selected == true){
             if(ak_->IsMouseReleased()){
                 std::cout << "Missile Unselected" << std::endl;
-                m1c->position = ak_->GetMouse();
+                m1c->position = ConvertMouse(ak_->GetMouse());
                 m1c->selected = false;
             }
             else{
                 std::cout << "Missile moved" << std::endl;
-                m1c->position = ak_->GetMouse();
+                m1c->position = ConvertMouse(ak_->GetMouse());
             }
         }
     }
 }
+Point LauncherSystem::ConvertMouse(Point p){
+    //Mouseinput naar standaard coord + spriteoffset
+    return Point(p.x_-17.5,450-p.y_+17.5);
+}
 
 bool LauncherSystem::Missile1Selected(Missile1Component* m1c){
-    if((ak_->GetMouse())*(m1c->position)<=100.5 && ak_->IsMouseClicked()){
+    //Cirkel hitbox
+    if((ConvertMouse(ak_->GetMouse()))*m1c->position<=17.5 && ak_->IsMouseClicked()){
         return true;
     }
     else{
