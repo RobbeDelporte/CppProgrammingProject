@@ -7,10 +7,12 @@
 #include "Context.h"
 #include "System.h"
 
+class System;
+
 class Engine
 {
 public:
-    Engine(Context& context) {}
+    Engine(Context& context) {EntityStream(entitystream_);}
 
     void AddEntity(Entity* entity);
 
@@ -29,6 +31,14 @@ public:
     Context& GetContext();
 
     void Update();
+private:
+    std::vector<Entity*> entities;
+
+    std::vector<System*> systems;
+
+    EntityStream entitystream_;
+
+    Context context_;  
 };
 
 #endif

@@ -1,39 +1,56 @@
 #include "Engine.h"
 
-/*
+
 void Engine::AddEntity(Entity* entity) {
-    // TODO
+    UpdateEntity(entity,entity->GetTags(),false);
+    entities.push_back(entity);
 }
 
 void Engine::UpdateEntity(Entity* entity, std::vector<Component::Tag>& tags, bool remove) {
-    // TODO
+    entitystream_.EntityUpdated(entity,tags,remove);
 }
 
 std::vector<Entity*>::iterator Engine::RemoveEntity(Entity* entity) {
-    // TODO
+    std::vector<Entity*>::iterator it;
+    for(it = entities.begin(); it != entities.end(); ++it){
+        if((*it) == entity){
+            UpdateEntity(entity,entity->GetTags(),true);
+            entities.erase(it);
+            break;
+        }
+    }
+    return it;
 }
 
 void Engine::AddSystem(System* system) {
-    // TODO
+    systems.push_back(system);
 }
 
 std::vector<System*>::iterator Engine::RemoveSystem(System* system) {
-    // TODO
+    std::vector<System*>::iterator it;
+    for(it = systems.begin(); it != systems.end(); ++it){
+        if((*it) == system){
+            systems.erase(it);
+            break;
+        }
+    }
+    return it;
 }
 
 std::vector<Entity*>& Engine::GetEntities() {
-    // TODO
+    return entities;
 }
 
 void Engine::Update() {
-     // TODO
+    for(System *s : systems){
+        s->Update();
+    }
 }
 
 EntityStream& Engine::GetEntityStream() {
-    // TODO
+    return entitystream_;
 }
 
 Context& Engine::GetContext() {
-    // TODO
+    return context_;
 }
-*/

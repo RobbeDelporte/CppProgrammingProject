@@ -5,7 +5,10 @@ class Component
 {
 public:
     enum Tag {
-        // TODO
+        SPRITE,
+        BOX,
+        MISSILE1,
+        NumComponents
     };
     
     virtual Tag GetTag() = 0;

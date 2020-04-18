@@ -1,6 +1,8 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include <math.h>
+
 class Point {
     public:
         double x_, y_;
@@ -9,27 +11,27 @@ class Point {
         Point(double x, double y) : x_(x), y_(y) {};
 
         double operator*(const Point& o) {
-            // TODO
-            return 0;
+            double a = sqrt((x_ - o.x_)*(x_ - o.x_)+(y_ - o.y_)*(y_ - o.y_));
+            return a;
         }
 
         Point operator-(const Point& o) {
-            // TODO
-            return Point();
+            return Point(x_ - o.x_ , y_ - o.y_);
         }
 
         double operator>>(const Point& o) {
-            // TODO
-            return 0;
+            double ip = x_*o.x_ + y_*o.y_;
+            return ip;
         }
 
         double Length() {
-            // TODO
-            return 0;
+            double l = sqrt(x_*x_+y_*y_);
+            return l;
         }
 
         void Normalize() {
-            // TODO
+            x_ = x_/Length();
+            y_ = y_/Length();
         }
 };
 
