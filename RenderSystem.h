@@ -18,8 +18,8 @@ class RenderSystem : public System {
     private:
         Allkit* ak_ = NULL;
         void RenderSprite(SpriteComponent* sc);
-        void RenderBox(BoxComponent* bc);
-        void RenderMissile(MissileComponent* mc);
+        void RenderBox(PositionComponent* pc,BoxComponent* bc);
+        void RenderMissile1(PositionComponent* pc);
 };
 
 #endif

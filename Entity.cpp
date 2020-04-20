@@ -1,11 +1,6 @@
 #include "Entity.h"
 
 
-Entity::~Entity(){
-    for(Component* component:GetComponents()){
-        delete component;
-    }
-}
 
 void Entity::Add(Component* component) {
     components.push_back(component);

@@ -7,8 +7,9 @@ public:
     enum Tag {
         SPRITE,
         BOX,
+        LEVELELEMENT,
         MISSILEQUEUE,
-        MISSILE,
+        POSITION,
         MISSILE1,
         CURRENTMISSILE,
         NumComponents

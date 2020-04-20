@@ -10,8 +10,6 @@ public:
 
     MissileQueueComponent(int q){queuenumber = q; selected = false;}
 
-    virtual ~MissileQueueComponent(){};
-
     Tag GetTag(){return MISSILEQUEUE;}
 
     int queuenumber;

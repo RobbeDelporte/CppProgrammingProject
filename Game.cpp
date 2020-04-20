@@ -60,6 +60,10 @@ void Game::SetupSystems(){
     ts->SetEngine(&engine_);
     engine_.AddSystem(ts);
 
+    LevelSystem* lvls = new LevelSystem();
+    lvls->SetEngine(&engine_);
+    engine_.AddSystem(lvls);
+
     RenderSystem* rs = new RenderSystem();
     rs->SetEngine(&engine_);
     engine_.AddSystem(rs);
@@ -74,18 +78,20 @@ void Game::LoadLevel(){
     }
     char c;
     int i =0;
-    int x,y,rx,ry;
+    int mx,my,rx,ry;
     
     while(inFile >> c){
-        x = i%8;
-        y = floor(i/8);
-        rx = 600 + 35*x;
-        ry = 125 + 35*y;
+        mx = i%8;
+        my = 7 - floor(i/8);
+        rx = 600 + 35*mx;
+        ry = 125 + 35*my;
         if(c == 'B'){
             Entity* box = new Entity;
-            box->Add(new BoxComponent(Point(rx,ry)));
+            box->Add(new LevelElementComponent(Point(mx,my)));
+            box->Add(new PositionComponent(Point(rx,ry)));
+            box->Add(new BoxComponent());
             engine_.AddEntity(box);
-            levelmatrix_[x][y] = box;
+            engine_.GetContext().levelmatrix_[mx][my] = box;
         }
         i++;
     }
@@ -94,17 +100,16 @@ void Game::LoadLevel(){
 
 void Game::InitMissileQueue(){
     Entity* me = new Entity;
-    me->Add(new MissileComponent(Point(120,230)));
+    me->Add(new PositionComponent(Point(120,230)));
     me->Add(new Missile1Component());
     me->Add(new MissileQueueComponent(0));
     engine_.AddEntity(me);
 
     for(int i = 1;i<4;i++){
         Entity* me = new Entity;
-        me->Add(new MissileComponent(Point(80 - 40*(i-1),125)));
+        me->Add(new PositionComponent(Point(80 - 40*(i-1),125)));
         me->Add(new Missile1Component());
         me->Add(new MissileQueueComponent(i));
         engine_.AddEntity(me);
-
     }
 }

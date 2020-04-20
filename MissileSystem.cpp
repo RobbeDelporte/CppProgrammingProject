@@ -5,16 +5,16 @@ void MissileSystem::Update(){
     std::set<Entity*> entities = es.WithTag(Component::CURRENTMISSILE);
     for(Entity* entity:entities){
         CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
-        Component* component = entity->GetComponent(Component::MISSILE);
-        MissileComponent* mc= dynamic_cast<MissileComponent*>(component);
-        mc->position = UpdatePosition(cmc,mc->position);
+        Component* component = entity->GetComponent(Component::POSITION);
+        PositionComponent* pc= dynamic_cast<PositionComponent*>(component);
+        pc->position = UpdatePosition(cmc,pc->position);
         UpdateSpeed(cmc);
     }
 }
 
 Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position){
-    position.x_ += cmc->xVelocity/100;
-    position.y_ += cmc->yVelocity/100;
+    position.x_ += cmc->xVelocity*(3/(5*FPS));
+    position.y_ += cmc->yVelocity*(3/(5*FPS));
 
     if(position.x_ < 0){
         position.x_ = 0;

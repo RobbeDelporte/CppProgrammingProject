@@ -21,9 +21,9 @@ void LauncherSystem::Update(){
         Component* component = entity->GetComponent(Component::MISSILEQUEUE);
         MissileQueueComponent* mqc = dynamic_cast<MissileQueueComponent*>(component);
         if(mqc->queuenumber==0){
-            Component* component = entity->GetComponent(Component::MISSILE);
-            MissileComponent* mc= dynamic_cast<MissileComponent*>(component);
-            if(MissileSelected(mc,mouseInput,keyInput)){
+            Component* component = entity->GetComponent(Component::POSITION);
+            PositionComponent* pc= dynamic_cast<PositionComponent*>(component);
+            if(MissileSelected(pc,mouseInput,keyInput)){
                 mqc->selected = true;
             }
             else if(mqc->selected == true && keyInput == Engine::KEY_MOUSE_UP){
@@ -31,7 +31,7 @@ void LauncherSystem::Update(){
                 mqc->selected = false;
             }
             else if(mqc->selected == true){
-                mc->position = (ConvertMouse(mouseInput)+Point(120,230))/2;           
+                pc->position = (ConvertMouse(mouseInput)+Point(120,230))/2;           
             }
         }
     }
@@ -41,9 +41,9 @@ Point LauncherSystem::ConvertMouse(Point p){
     return Point(p.x_-(MISSILE_DST_HEIGHT/2),SCREEN_HEIGHT-p.y_+(MISSILE_DST_HEIGHT/2));
 }
 
-bool LauncherSystem::MissileSelected(MissileComponent* mc,Point mouseInput,Engine::KEY_PRESSED keyInput){
+bool LauncherSystem::MissileSelected(PositionComponent* pc,Point mouseInput,Engine::KEY_PRESSED keyInput){
     //Cirkel hitbox
-    if((ConvertMouse(mouseInput))*(mc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN){
+    if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN){
         return true;
     }
     else{
@@ -55,7 +55,7 @@ void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Poi
     GetEngine()->RemoveEntity(entity);
     entity->Remove(mqc);
     
-    double vx = std::min(LAUNCH_STRENGTH*(120 - ConvertMouse(mousepos).x_),1000.0);
+    double vx = std::min(LAUNCH_STRENGTH*(120 - ConvertMouse(mousepos).x_),1100.0);
     double vy = std::min(LAUNCH_STRENGTH*(230 - ConvertMouse(mousepos).y_),1000.0);
     std::cout << vx <<"  "<< vy <<std::endl;
 
@@ -66,7 +66,7 @@ void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Poi
 void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
     for(Entity* entity:entities){
         MissileQueueComponent* mqc = dynamic_cast<MissileQueueComponent*>(entity->GetComponent(Component::MISSILEQUEUE));
-        MissileComponent* mc = dynamic_cast<MissileComponent*>(entity->GetComponent(Component::MISSILE));
+        PositionComponent* mc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
         mqc->queuenumber -= 1;
             if(mqc->queuenumber==0){
                 mc->position = Point(120,230);
@@ -77,7 +77,7 @@ void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
 
     }
     Entity* me = new Entity;
-    me->Add(new MissileComponent(Point(0,125)));
+    me->Add(new PositionComponent(Point(0,125)));
     me->Add(new Missile1Component());
     me->Add(new MissileQueueComponent());
     GetEngine()->AddEntity(me);

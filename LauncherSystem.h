@@ -18,7 +18,7 @@ class LauncherSystem : public System {
     private:
         Allkit* ak_ = NULL;
 
-        bool MissileSelected(MissileComponent*,Point,Engine::KEY_PRESSED);
+        bool MissileSelected(PositionComponent*,Point,Engine::KEY_PRESSED);
 
         Point ConvertMouse(Point);
 

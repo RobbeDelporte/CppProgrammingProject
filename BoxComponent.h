@@ -6,7 +6,7 @@
 
 class BoxComponent: public Component{
 public:
-    BoxComponent(Point p):position(p){HitCounter = 0;BoxHit = false;};
+    BoxComponent(){HitCounter = 0;BoxHit = false;};
 
     virtual ~BoxComponent(){};
 
@@ -15,8 +15,6 @@ public:
     bool BoxHit;
 
     int HitCounter;
-
-    Point position;
 };
 
 #endif

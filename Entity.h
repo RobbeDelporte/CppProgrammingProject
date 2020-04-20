@@ -7,15 +7,14 @@
 #include "SpriteComponent.h"
 #include "BoxComponent.h"
 #include "MissileQueueComponent.h"
-#include "MissileComponent.h"
+#include "PositionComponent.h"
 #include "Missile1Component.h"
 #include "CurrentMissileComponent.h"
+#include "LevelElementComponent.h"
 
 class Entity
 {
 public:
-    ~Entity();
-
     void Add(Component* component);
 
     void Remove(Component* component);

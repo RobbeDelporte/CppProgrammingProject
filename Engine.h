@@ -43,6 +43,7 @@ public:
 
     KEY_PRESSED keyInput = KEY_NONE;
 
+
 private:
     std::vector<Entity*> entities;
 
