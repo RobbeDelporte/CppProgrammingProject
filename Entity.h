@@ -6,7 +6,11 @@
 #include "Component.h"
 #include "SpriteComponent.h"
 #include "BoxComponent.h"
+#include "MissileQueueComponent.h"
+#include "PositionComponent.h"
 #include "Missile1Component.h"
+#include "CurrentMissileComponent.h"
+#include "LevelElementComponent.h"
 
 class Entity
 {

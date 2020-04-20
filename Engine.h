@@ -12,6 +12,13 @@ class System;
 class Engine
 {
 public:
+    enum KEY_PRESSED{
+        KEY_NONE,
+        KEY_SPACE,
+        KEY_MOUSE_UP,
+        KEY_MOUSE_DOWN
+    };
+
     Engine(Context& context) {EntityStream(entitystream_);}
 
     void AddEntity(Entity* entity);
@@ -31,6 +38,12 @@ public:
     Context& GetContext();
 
     void Update();
+
+    Point mouseinput;
+
+    KEY_PRESSED keyInput = KEY_NONE;
+
+
 private:
     std::vector<Entity*> entities;
 

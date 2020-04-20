@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Engine.h"
+#include "Constants.h"
 
 class Engine;
 

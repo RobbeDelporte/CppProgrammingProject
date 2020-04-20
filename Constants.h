@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define FPS 60.0
+#define FPS 30.0
 
 #define DEBUG_MODE false
 
@@ -24,5 +24,11 @@
 #define MAX_HIGHSCORES 4
 #define MISSILES 4
 #define LEVEL_SIZE 8
+
+#define LAUNCH_STRENGTH 8
+#define GRAVITYCONSTANT 15
+#define AIRFRICTIONCONSTANT 1.003
+
+#define HITDURATION 7
 
 #endif

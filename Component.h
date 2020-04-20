@@ -7,10 +7,15 @@ public:
     enum Tag {
         SPRITE,
         BOX,
+        LEVELELEMENT,
+        MISSILEQUEUE,
+        POSITION,
         MISSILE1,
+        CURRENTMISSILE,
         NumComponents
     };
-    
+    virtual ~Component(){};
+
     virtual Tag GetTag() = 0;
 
 };

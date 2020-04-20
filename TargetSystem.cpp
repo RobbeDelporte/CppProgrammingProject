@@ -1,7 +1,48 @@
 #include "TargetSystem.h"
 
 void TargetSystem::Update() {
-    // TODO
+
+    EntityStream es = GetEngine()->GetEntityStream();
+    Entity* currentMissile = *(es.WithTag(Component::CURRENTMISSILE).begin());
+    std::set<Entity*> boxTargets = es.WithTag(Component::BOX);
+
+    if(GetEngine()->GetContext().TargetsHit){
+        //Verwijderd Geraakte Targets indien nodig
+        //Indien Geen geraakte targets meer: TargetsHit = false
+        EvaluateTargets(boxTargets);
+    }
+
+    if(currentMissile!=NULL){
+        /*Collisionberekeningen worden enkel gedaan indien:
+            -Er een missile bestaat
+            -Deze zich rechts van de x 550 bevind en dus kan botsen met het level
+        */
+        PositionComponent* mpc= dynamic_cast<PositionComponent*>(currentMissile->GetComponent(Component::POSITION));
+        if(mpc->position.x_>550){
+
+            std::vector<Point> missilePoly;
+            std::vector<Point> boxPoly;
+            if(currentMissile->GetComponent(Component::MISSILE1)!=NULL){
+                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT)};
+            }
+
+            for(Entity* boxTarget: boxTargets){
+                PositionComponent* bpc = dynamic_cast<PositionComponent*>(boxTarget->GetComponent(Component::POSITION));
+                boxPoly = {bpc->position,Point(bpc->position.x_,bpc->position.y_-MISSILE_DST_HEIGHT),Point(bpc->position.x_+MISSILE_DST_WIDTH,bpc->position.y_),Point(bpc->position.x_+MISSILE_DST_WIDTH,bpc->position.y_-MISSILE_DST_HEIGHT)};
+
+                BoxComponent* bc = dynamic_cast<BoxComponent*>(boxTarget->GetComponent(Component::BOX));
+
+                if(CheckCollision(missilePoly,boxPoly)){
+                    //Colision with box happend
+                    bc->BoxHit = true;
+                    GetEngine()->GetContext().TargetsHit = true;
+                    GetEngine()->RemoveEntity(currentMissile);
+                    //delete currentMissile; TODO: FIX THIS
+                    GetEngine()->GetContext().LoadNextMissile = true;
+                }
+            }
+        }
+    }
 }
 
 bool TargetSystem::CheckCollision(std::vector<Point>& coordinates_poly_one, std::vector<Point>& coordinates_poly_two) {
@@ -77,5 +118,30 @@ double TargetSystem::DistanceBetweenPolys(double min_dotp_poly_one, double max_d
     }
     else {
         return min_dotp_poly_one - max_dotp_poly_two;
+    }
+}
+
+void TargetSystem::EvaluateTargets(std::set<Entity*> boxTargets){
+    std::cout<<"Evaluating target" << std::endl;
+    int c = 0;
+    for(Entity* boxTarget:boxTargets){
+        LevelElementComponent* lec = dynamic_cast<LevelElementComponent*>(boxTarget->GetComponent(Component::LEVELELEMENT));
+        BoxComponent* bc = dynamic_cast<BoxComponent*>(boxTarget->GetComponent(Component::BOX));
+        if(bc->BoxHit){
+            bc->HitCounter += 1;
+            if(bc->HitCounter >= HITDURATION){
+                GetEngine()->RemoveEntity(boxTarget);
+                GetEngine()->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_] = NULL;
+                GetEngine()->GetContext().NeedLevelUpdate = true;
+                delete boxTarget;
+            }
+            else{
+                c += 1;
+            }
+        }
+    }
+    if(c == 0){
+        //Geen targets meer die geraakt zijn
+        GetEngine()->GetContext().TargetsHit = false;
     }
 }

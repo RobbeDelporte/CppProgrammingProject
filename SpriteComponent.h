@@ -7,13 +7,15 @@
 
 class SpriteComponent: public Component{
 public:
-    SpriteComponent(Sprite s, Point p): sprite(s), location(p){};
+    SpriteComponent(Sprite s, Point p): sprite(s), position(p){};
+
+    virtual ~SpriteComponent(){};
 
     Tag GetTag(){return SPRITE;}
 
     Sprite sprite;
 
-    Point location;
+    Point position;
 };
 
 #endif

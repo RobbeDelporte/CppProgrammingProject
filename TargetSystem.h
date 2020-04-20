@@ -2,6 +2,7 @@
 #define TARGETSYSTEM_H
 
 #include <vector>
+#include <iostream>
 
 #include "Point.h"
 #include "System.h"
@@ -18,6 +19,8 @@ class TargetSystem : public System {
         void ProjectOnAxis(std::vector<Point>& coordinates, Point& axis, double& min, double& max);
 
         double DistanceBetweenPolys(double min_a, double max_a, double min_b, double max_b);
+
+        void EvaluateTargets(std::set<Entity*>);
 };
 
 #endif
