@@ -19,7 +19,7 @@ public:
         KEY_MOUSE_DOWN
     };
 
-    Engine(Context& context) {EntityStream(entitystream_);}
+    Engine(Context& context) {EntityStream entitystream_;}
 
     void AddEntity(Entity* entity);
 
