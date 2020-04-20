@@ -6,11 +6,16 @@
 #include "Component.h"
 #include "SpriteComponent.h"
 #include "BoxComponent.h"
+#include "MissileQueueComponent.h"
+#include "MissileComponent.h"
 #include "Missile1Component.h"
+#include "CurrentMissileComponent.h"
 
 class Entity
 {
 public:
+    ~Entity();
+
     void Add(Component* component);
 
     void Remove(Component* component);

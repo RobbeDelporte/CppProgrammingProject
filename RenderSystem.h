@@ -19,7 +19,7 @@ class RenderSystem : public System {
         Allkit* ak_ = NULL;
         void RenderSprite(SpriteComponent* sc);
         void RenderBox(BoxComponent* bc);
-        void RenderMissile1(Missile1Component* mc);
+        void RenderMissile(MissileComponent* mc);
 };
 
 #endif

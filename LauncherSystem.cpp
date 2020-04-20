@@ -6,44 +6,80 @@
 void LauncherSystem::Update(){
     EntityStream es = GetEngine()->GetEntityStream();
     std::set<Entity*> entities;
-    entities = es.WithTag(Component::MISSILE1);
-    
-    if(ak_->IsSpaceBarPushed()){
-        std::cout << ak_->GetMouse().x_ << "    " << ak_->GetMouse().y_ << std::endl;
+    entities = es.WithTag(Component::MISSILEQUEUE);
+
+    if(GetEngine()->GetContext().LoadNextMissile){
+        UpdateQueue(entities);
     }
+
+    Point mouseInput = GetEngine()->mouseinput;
+
+    Engine::KEY_PRESSED keyInput = GetEngine()->keyInput;
+
     for(Entity* entity:entities){
 
-        Component* component = entity->GetComponent(Component::MISSILE1);
-        Missile1Component* m1c = dynamic_cast<Missile1Component*>(component);
-
-        if(m1c->queuenumber == 0 && Missile1Selected(m1c) && m1c->selected == false){
-            std::cout << "missile selected" << std::endl;
-            m1c->selected = true;
-        }
-        else if(m1c->selected == true){
-            if(ak_->IsMouseReleased()){
-                std::cout << "Missile Unselected" << std::endl;
-                m1c->position = ConvertMouse(ak_->GetMouse());
-                m1c->selected = false;
+        Component* component = entity->GetComponent(Component::MISSILEQUEUE);
+        MissileQueueComponent* mqc = dynamic_cast<MissileQueueComponent*>(component);
+        if(mqc->queuenumber==0){
+            Component* component = entity->GetComponent(Component::MISSILE);
+            MissileComponent* mc= dynamic_cast<MissileComponent*>(component);
+            if(MissileSelected(mc,mouseInput,keyInput)){
+                mqc->selected = true;
             }
-            else{
-                std::cout << "Missile moved" << std::endl;
-                m1c->position = ConvertMouse(ak_->GetMouse());
+            else if(mqc->selected == true && keyInput == Engine::KEY_MOUSE_UP){
+                LaunchMissile(entity,mqc,mouseInput);
+                mqc->selected = false;
+            }
+            else if(mqc->selected == true){
+                mc->position = (ConvertMouse(mouseInput)+Point(120,230))/2;           
             }
         }
     }
 }
 Point LauncherSystem::ConvertMouse(Point p){
     //Mouseinput naar standaard coord + spriteoffset
-    return Point(p.x_-17.5,450-p.y_+17.5);
+    return Point(p.x_-(MISSILE_DST_HEIGHT/2),SCREEN_HEIGHT-p.y_+(MISSILE_DST_HEIGHT/2));
 }
 
-bool LauncherSystem::Missile1Selected(Missile1Component* m1c){
+bool LauncherSystem::MissileSelected(MissileComponent* mc,Point mouseInput,Engine::KEY_PRESSED keyInput){
     //Cirkel hitbox
-    if((ConvertMouse(ak_->GetMouse()))*m1c->position<=17.5 && ak_->IsMouseClicked()){
+    if((ConvertMouse(mouseInput))*(mc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN){
         return true;
     }
     else{
         return false;
     }
+}
+
+void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Point mousepos){
+    GetEngine()->RemoveEntity(entity);
+    entity->Remove(mqc);
+    
+    double vx = std::min(LAUNCH_STRENGTH*(120 - ConvertMouse(mousepos).x_),1000.0);
+    double vy = std::min(LAUNCH_STRENGTH*(230 - ConvertMouse(mousepos).y_),1000.0);
+    std::cout << vx <<"  "<< vy <<std::endl;
+
+    entity->Add(new CurrentMissileComponent(vx,vy));
+    GetEngine()->AddEntity(entity);
+}
+
+void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
+    for(Entity* entity:entities){
+        MissileQueueComponent* mqc = dynamic_cast<MissileQueueComponent*>(entity->GetComponent(Component::MISSILEQUEUE));
+        MissileComponent* mc = dynamic_cast<MissileComponent*>(entity->GetComponent(Component::MISSILE));
+        mqc->queuenumber -= 1;
+            if(mqc->queuenumber==0){
+                mc->position = Point(120,230);
+            }
+            else{
+                mc->position = Point(80-40*(mqc->queuenumber-1),125);
+            }
+
+    }
+    Entity* me = new Entity;
+    me->Add(new MissileComponent(Point(0,125)));
+    me->Add(new Missile1Component());
+    me->Add(new MissileQueueComponent());
+    GetEngine()->AddEntity(me);
+    GetEngine()->GetContext().LoadNextMissile = false;
 }

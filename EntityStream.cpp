@@ -2,7 +2,7 @@
 
 EntityStream::EntityStream(){
     for(Component::Tag tag = (Component::Tag)0; tag !=Component::NumComponents;tag=(Component::Tag)(tag+1)){
-        std::set<Entity*> entities;
+        std::set<Entity*> entities = {};
         map.insert(std::pair<Component::Tag,std::set<Entity*>>(tag,entities));
     }
 }

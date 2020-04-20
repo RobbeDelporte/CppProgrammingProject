@@ -6,15 +6,17 @@
 
 class BoxComponent: public Component{
 public:
-    BoxComponent(int x,int y):x_(x),y_(y){};
+    BoxComponent(Point p):position(p){HitCounter = 0;BoxHit = false;};
+
+    virtual ~BoxComponent(){};
 
     Tag GetTag(){return BOX;}
 
-    int hp;
+    bool BoxHit;
 
-    int x_;
+    int HitCounter;
 
-    int y_;
+    Point position;
 };
 
 #endif

@@ -6,6 +6,9 @@
 #include "Context.h"
 #include "RenderSystem.h"
 #include "LauncherSystem.h"
+#include "MissileSystem.h"
+#include "TargetSystem.h"
+
 #include <fstream>
 #include <iostream>
 
@@ -30,6 +33,8 @@ public:
     void ReadLevelMatrix();
 
     void LoadLevel();
+
+    void InitMissileQueue();
 
 private:
     Allkit* ak_ = NULL;

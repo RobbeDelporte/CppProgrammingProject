@@ -6,14 +6,10 @@
 
 class Missile1Component: public Component{
 public:
-    Missile1Component(Point p): position(p){}
+    Missile1Component(){}
+
+    virtual ~Missile1Component(){};
 
     Tag GetTag(){return MISSILE1;}
-
-    Point position;
-
-    int queuenumber = 0;
-
-    bool selected = false;
 };
 #endif

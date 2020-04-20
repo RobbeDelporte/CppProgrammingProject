@@ -2,6 +2,7 @@
 #define LAUNCHERSYSTEM_H
 
 #include <vector>
+#include <algorithm>
 
 #include "Allkit.h"
 #include "Point.h"
@@ -17,9 +18,14 @@ class LauncherSystem : public System {
     private:
         Allkit* ak_ = NULL;
 
-        bool Missile1Selected(Missile1Component*);
+        bool MissileSelected(MissileComponent*,Point,Engine::KEY_PRESSED);
 
         Point ConvertMouse(Point);
+
+        void LaunchMissile(Entity*,MissileQueueComponent*,Point);
+
+        void UpdateQueue(std::set<Entity*>);
+
 };
 
 #endif

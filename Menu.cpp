@@ -90,7 +90,7 @@ void Menu::LevelSelect(){
 }
 
 void Menu::UpdateMenu(std::vector<Button> buttons){
-    ak_->DrawScaledBitmap(background,0,0,1200,600,0,0,900,450);
+    ak_->DrawScaledBitmap(background,0,0,BACKGROUND_WIDTH,BACKGROUND_HEIGHT,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
     for(unsigned int i =0;i<buttons.size();i++){
         Color color;
         i == selectedButton ? color = selected : color = unselected;

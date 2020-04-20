@@ -25,4 +25,10 @@
 #define MISSILES 4
 #define LEVEL_SIZE 8
 
+#define LAUNCH_STRENGTH 8
+#define GRAVITYCONSTANT 15
+#define AIRFRICTIONCONSTANT 1.003
+
+#define HITDURATION 15
+
 #endif

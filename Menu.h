@@ -2,6 +2,8 @@
 #define MENU_H
 
 #include "Allkit.h"
+#include "Constants.h"
+
 class Button;
 
 class Menu

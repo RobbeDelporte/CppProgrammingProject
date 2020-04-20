@@ -14,9 +14,20 @@ class Point {
             double a = sqrt((x_ - o.x_)*(x_ - o.x_)+(y_ - o.y_)*(y_ - o.y_));
             return a;
         }
+        Point operator*(const int& a){
+            return Point(x_*a,y_*a);
+        }
 
         Point operator-(const Point& o) {
             return Point(x_ - o.x_ , y_ - o.y_);
+        }
+
+        Point operator+(const Point& o){
+            return Point(x_+o.x_,y_+o.y_);
+        }
+
+        Point operator/(const int& a){
+            return Point(x_/a,y_/a);
         }
 
         double operator>>(const Point& o) {

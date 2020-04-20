@@ -5,6 +5,10 @@
 class Context {
 public:
     std::string level;
+
+    bool LoadNextMissile = false;
+
+    bool TargetsHit = false;
 };
 
 #endif
