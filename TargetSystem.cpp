@@ -42,10 +42,12 @@ void TargetSystem::Update() {
                     //Colision with box happend
                     lec->IsHit = true;
                     GetEngine()->GetContext().TargetsHit = true;
-                    GetEngine()->RemoveEntity(currentMissile);
-                    //delete currentMissile; TODO: FIX THIS
                     GetEngine()->GetContext().LoadNextMissile = true;
                 }
+            }
+            if(GetEngine()->GetContext().TargetsHit){
+                GetEngine()->RemoveEntity(currentMissile);
+                delete currentMissile;
             }
         }
     }

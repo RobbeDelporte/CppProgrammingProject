@@ -19,6 +19,12 @@
 class Entity
 {
 public:
+    ~Entity(){
+        for(Component* component:GetComponents()){
+            delete component;
+        }
+    };
+
     void Add(Component* component);
 
     void Remove(Component* component);

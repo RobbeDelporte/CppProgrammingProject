@@ -23,7 +23,12 @@ public:
 
     ~Game()
     {
-        // TODO
+        for(Entity* entity:engine_.GetEntities()){
+            delete entity;
+        };
+        for(System* system:engine_.GetSystems()){
+            delete system;
+        };
     };
 
     bool Run();

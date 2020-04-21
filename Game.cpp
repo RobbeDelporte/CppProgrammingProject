@@ -33,10 +33,12 @@ bool Game::Run() {
         }
 
         if(ak_->IsWindowClosed()){
+            ak_->StopTimer();
             exit_ = true;
         }    
             
         if(ak_->IsArrowKeyDownPushed()){
+            ak_->StopTimer();
             exit_= true;
         }
     }
@@ -70,6 +72,11 @@ void Game::SetupSystems(){
 }
 
 void Game::LoadLevel(){
+    //Catapult things
+    Entity* entity = new Entity;
+    entity->Add(new SpriteComponent(SPRT_LAUNCHER,Point(100,235)));
+    engine_.AddEntity(entity);
+
     std::ifstream inFile;
     inFile.open(context_.level);
     if(!inFile){
@@ -81,6 +88,7 @@ void Game::LoadLevel(){
     int mx,my,rx,ry;
     
     while(inFile >> c){
+
         mx = i%8;
         my = 7 - floor(i/8);
         rx = 600 + 35*mx;
@@ -113,7 +121,7 @@ void Game::LoadLevel(){
 
 void Game::InitMissileQueue(){
     Entity* me = new Entity;
-    me->Add(new PositionComponent(Point(120,230)));
+    me->Add(new PositionComponent(Point(140,230)));
     me->Add(new Missile1Component());
     me->Add(new MissileQueueComponent(0));
     engine_.AddEntity(me);

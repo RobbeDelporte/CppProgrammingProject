@@ -89,7 +89,10 @@ void Allkit::Init()
     sprites[SPRT_SLIME1] = al_load_bitmap("./assets/images/slime1.png");
     sprites[SPRT_SLIME2] = al_load_bitmap("./assets/images/slime2.png");
     sprites[SPRT_BEE1] = al_load_bitmap("./assets/images/bee1.png");
+    sprites[SPRT_BEE2] = al_load_bitmap("./assets/images/bee2.png");
+    sprites[SPRT_BEE3] = al_load_bitmap("./assets/images/bee3.png");
     sprites[SPRT_ROCK] = al_load_bitmap("./assets/images/rock.png");
+    sprites[SPRT_SLIME_HIT] = al_load_bitmap("./assets/images/slime_hit.png");
 
     LoadLaunchSound();
 

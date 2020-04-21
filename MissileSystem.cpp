@@ -5,22 +5,28 @@ void MissileSystem::Update(){
     std::set<Entity*> entities = es.WithTag(Component::CURRENTMISSILE);
     for(Entity* entity:entities){
         CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
-        Component* component = entity->GetComponent(Component::POSITION);
-        PositionComponent* pc= dynamic_cast<PositionComponent*>(component);
-        pc->position = UpdatePosition(cmc,pc->position);
+        PositionComponent* pc= dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
         UpdateSpeed(cmc);
+        if(GetEngine()->keyInput == Engine::KEY_SPACE && cmc->SpecialActivated == false){
+            ActivateSpecial(entity);
+        }
+        pc->position = UpdatePosition(cmc,pc->position,entity);
     }
 }
 
-Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position){
+Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position,Entity* entity){
     position.x_ += cmc->xVelocity/VELOCITYPRESCALER;
     position.y_ += cmc->yVelocity/VELOCITYPRESCALER;
 
     if(position.x_ < 0){
-        position.x_ = 0;
+        GetEngine()->GetContext().LoadNextMissile = true;
+        GetEngine()->RemoveEntity(entity);
+        delete entity;
     }
-    else if(position.x_ > SCREEN_WIDTH - MISSILE_DST_WIDTH){ //900 - 35
-        position.x_ = SCREEN_WIDTH - MISSILE_DST_WIDTH;
+    else if(position.x_ > SCREEN_WIDTH){ //900 - 35
+        GetEngine()->GetContext().LoadNextMissile = true;
+        GetEngine()->RemoveEntity(entity);
+        delete entity;
     }
 
     if(position.y_ < 90 + MISSILE_DST_HEIGHT){ //90 + 35
@@ -31,6 +37,23 @@ Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position
 }
 
 void MissileSystem::UpdateSpeed(CurrentMissileComponent* cmc){
-    cmc->yVelocity -= GRAVITYCONSTANT;
-    cmc->xVelocity /= AIRFRICTIONCONSTANT;
+    if(cmc->SpecialActivated == false){
+        cmc->yVelocity -= GRAVITYCONSTANT;
+    }
+}
+
+void MissileSystem::ActivateSpecial(Entity* entity){
+    std::cout << "activating" << std::endl;
+    if(entity->HasComponent(Component::MISSILE2)){
+        CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
+        cmc->yVelocity = 0;
+        cmc->xVelocity = 800;
+        cmc->SpecialActivated = true;
+    }
+    else if(entity->HasComponent(Component::MISSILE3)){
+        CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
+        cmc->yVelocity = -800;
+        cmc->xVelocity = 200;
+        cmc->SpecialActivated = true;
+    }
 }

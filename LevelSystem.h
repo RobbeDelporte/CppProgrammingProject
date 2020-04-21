@@ -6,6 +6,8 @@
 class LevelSystem: public System{
 public:
     void Update();
+
+    virtual ~LevelSystem(){};
     
 private:
 

@@ -3,18 +3,22 @@
 
 #include "Point.h"
 #include "System.h"
+#include <iostream>
 
 class MissileSystem : public System {
     public:
-        MissileSystem(){
-        }
-        
+        MissileSystem(){}
+
+        virtual ~MissileSystem(){};
+
         void Update();
 
     private:
-        Point UpdatePosition(CurrentMissileComponent*,Point);
+        Point UpdatePosition(CurrentMissileComponent*,Point,Entity*);
 
         void UpdateSpeed(CurrentMissileComponent*);
+
+        void ActivateSpecial(Entity*);
 };
 
 #endif

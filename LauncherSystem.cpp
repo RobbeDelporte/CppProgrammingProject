@@ -55,7 +55,7 @@ void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Poi
     GetEngine()->RemoveEntity(entity);
     entity->Remove(mqc);
     
-    double vx = std::min(LAUNCH_STRENGTH*(120 - ConvertMouse(mousepos).x_),1100.0);
+    double vx = std::min(LAUNCH_STRENGTH*(140 - ConvertMouse(mousepos).x_),1100.0);
     double vy = std::min(LAUNCH_STRENGTH*(230 - ConvertMouse(mousepos).y_),1000.0);
     std::cout << vx <<"  "<< vy <<std::endl;
 
@@ -69,7 +69,7 @@ void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
         PositionComponent* mc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
         mqc->queuenumber -= 1;
             if(mqc->queuenumber==0){
-                mc->position = Point(120,230);
+                mc->position = Point(140,230);
             }
             else{
                 mc->position = Point(80-40*(mqc->queuenumber-1),125);
@@ -78,7 +78,16 @@ void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
     }
     Entity* me = new Entity;
     me->Add(new PositionComponent(Point(0,125)));
-    me->Add(new Missile1Component());
+    int r = rand()%3;
+    if(r == 0){
+        me->Add(new Missile1Component());
+    }
+    else if(r == 1){
+        me->Add(new Missile2Component());
+    }
+    else if(r == 2){
+        me->Add(new Missile3Component());
+    }
     me->Add(new MissileQueueComponent());
     GetEngine()->AddEntity(me);
     GetEngine()->GetContext().LoadNextMissile = false;

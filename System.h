@@ -9,6 +9,8 @@ class Engine;
 
 class System {
 public:
+    virtual ~System(){};
+
     virtual void Update() = 0;
 
     void SetEngine(Engine* engine){engine_ = engine;};
