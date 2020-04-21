@@ -16,10 +16,25 @@ void RenderSystem::Update(){
 
     entities = es.WithTag(Component::BOX);
     for(Entity* entity: entities){
-        BoxComponent* bc = dynamic_cast<BoxComponent*>(entity->GetComponent(Component::BOX));
-
+        LevelElementComponent* lec = dynamic_cast<LevelElementComponent*>(entity->GetComponent(Component::LEVELELEMENT));
         PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
-        RenderBox(pc,bc);
+        RenderBox(pc,lec);
+    }
+
+    entities = es.WithTag(Component::STONE);
+    for(Entity* entity: entities){
+        LevelElementComponent* lec = dynamic_cast<LevelElementComponent*>(entity->GetComponent(Component::LEVELELEMENT));
+        PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
+        RenderStone(pc,lec);
+    }
+
+    entities = es.WithTag(Component::TARGET);
+    for(Entity* entity: entities){
+        LevelElementComponent* lec = dynamic_cast<LevelElementComponent*>(entity->GetComponent(Component::LEVELELEMENT));
+        PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
+        TargetComponent* tc = dynamic_cast<TargetComponent*>(entity->GetComponent(Component::TARGET));
+
+        RenderTarget(pc,lec,tc);
     }
 
     entities = es.WithTag(Component::MISSILE1);
@@ -29,6 +44,19 @@ void RenderSystem::Update(){
         RenderMissile1(pc);
     }
 
+    entities = es.WithTag(Component::MISSILE2);
+    for(Entity* entity: entities){
+        Component* component = entity->GetComponent(Component::POSITION);
+        PositionComponent* pc = dynamic_cast<PositionComponent*>(component);
+        RenderMissile2(pc);
+    }
+
+    entities = es.WithTag(Component::MISSILE3);
+    for(Entity* entity: entities){
+        Component* component = entity->GetComponent(Component::POSITION);
+        PositionComponent* pc = dynamic_cast<PositionComponent*>(component);
+        RenderMissile3(pc);
+    }
     ak_->DrawOnScreen();
 }
 
@@ -36,13 +64,39 @@ void RenderSystem::RenderSprite(SpriteComponent* sc){
     ak_->DrawScaledBitmap(sc->sprite,0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,sc->position.x_,SCREEN_HEIGHT-sc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
 }
 
-void RenderSystem::RenderBox(PositionComponent* pc,BoxComponent* bc){
+void RenderSystem::RenderBox(PositionComponent* pc,LevelElementComponent* lec){
     Sprite s;
-    bc->BoxHit ? s=SPRT_BOX_HIT : s = SPRT_BOX; 
+    lec->IsHit ? s=SPRT_BOX_HIT : s = SPRT_CSTONE; 
     
     ak_->DrawScaledBitmap(s,0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,pc->position.x_,SCREEN_HEIGHT-pc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
 }
 
+void RenderSystem::RenderStone(PositionComponent* pc,LevelElementComponent* lec){
+    Sprite s;
+    lec->IsHit ? s=SPRT_OBSIDIAN_HIT : s = SPRT_OBSIDIAN; 
+    
+    ak_->DrawScaledBitmap(s,0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,pc->position.x_,SCREEN_HEIGHT-pc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
+}
+
+void RenderSystem::RenderTarget(PositionComponent* pc,LevelElementComponent* lec,TargetComponent* tc){
+    ak_->DrawScaledBitmap(tc->TargetAnim[tc->animStage],0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,pc->position.x_,SCREEN_HEIGHT-pc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
+    if(tc->animTiming>=TARGETANIMTIMING){
+        tc->animStage = (tc->animStage+1)%(tc->TargetAnim.size());
+        tc->animTiming = 0;
+    }
+    else{
+        tc->animTiming += 1;
+    }
+}
+
 void RenderSystem::RenderMissile1(PositionComponent* pc){
-    ak_->DrawScaledBitmap(SPRT_MISSILE_1,0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,pc->position.x_,SCREEN_HEIGHT-pc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
+    ak_->DrawScaledBitmap(SPRT_FIRECHARGE,0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,pc->position.x_,SCREEN_HEIGHT-pc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
+}
+
+void RenderSystem::RenderMissile2(PositionComponent* pc){
+    ak_->DrawScaledBitmap(SPRT_BEE1,0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,pc->position.x_,SCREEN_HEIGHT-pc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
+}
+
+void RenderSystem::RenderMissile3(PositionComponent* pc){
+    ak_->DrawScaledBitmap(SPRT_ROCK,0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,pc->position.x_,SCREEN_HEIGHT-pc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
 }

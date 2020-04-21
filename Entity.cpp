@@ -37,3 +37,11 @@ std::vector<Component*>& Entity::GetComponents() {
     return components;
 }
 
+bool Entity::HasComponent(Component::Tag tag){
+    for(Component* component: components){
+        if(component->GetTag() == tag){
+            return true;
+        }
+    }
+    return false;
+}

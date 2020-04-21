@@ -85,14 +85,27 @@ void Game::LoadLevel(){
         my = 7 - floor(i/8);
         rx = 600 + 35*mx;
         ry = 125 + 35*my;
-        if(c == 'B'){
-            Entity* box = new Entity;
-            box->Add(new LevelElementComponent(Point(mx,my)));
-            box->Add(new PositionComponent(Point(rx,ry)));
-            box->Add(new BoxComponent());
-            engine_.AddEntity(box);
-            engine_.GetContext().levelmatrix_[mx][my] = box;
+
+        Entity* entity = new Entity;
+        entity->Add(new LevelElementComponent(Point(mx,my)));
+        entity->Add(new PositionComponent(Point(rx,ry)));
+        if(c =='B'){
+            entity->Add(new BoxComponent());
+            engine_.AddEntity(entity);
         }
+        else if(c == 'S'){
+            entity->Add(new StoneComponent());
+            engine_.AddEntity(entity);
+        }
+        else if(c == 'T'){
+            entity->Add(new TargetComponent());
+            engine_.AddEntity(entity);
+        }
+        else{
+            entity = NULL;
+        }
+         
+        engine_.GetContext().levelmatrix_[mx][my] = entity;
         i++;
     }
     inFile.close();
@@ -105,10 +118,20 @@ void Game::InitMissileQueue(){
     me->Add(new MissileQueueComponent(0));
     engine_.AddEntity(me);
 
+    int r;
     for(int i = 1;i<4;i++){
         Entity* me = new Entity;
         me->Add(new PositionComponent(Point(80 - 40*(i-1),125)));
-        me->Add(new Missile1Component());
+        r = rand()%3;
+        if(r == 0){
+            me->Add(new Missile1Component());
+        }
+        else if(r == 1){
+            me->Add(new Missile2Component());
+        }
+        else if(r == 2){
+            me->Add(new Missile3Component());
+        }
         me->Add(new MissileQueueComponent(i));
         engine_.AddEntity(me);
     }

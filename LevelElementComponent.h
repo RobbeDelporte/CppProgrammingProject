@@ -6,13 +6,17 @@
 
 class LevelElementComponent:public Component{
 public:
-    LevelElementComponent(Point mp):matrixPosition(mp){};
+    LevelElementComponent(Point mp):matrixPosition(mp){IsHit = false; HitCounter = 0;};
 
     virtual ~LevelElementComponent(){};
 
     Tag GetTag(){return LEVELELEMENT;}
 
     Point matrixPosition;
+
+    bool IsHit;
+
+    int HitCounter;
 };
 
 #endif

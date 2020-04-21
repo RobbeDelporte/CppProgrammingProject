@@ -9,8 +9,12 @@
 #include "MissileQueueComponent.h"
 #include "PositionComponent.h"
 #include "Missile1Component.h"
+#include "Missile2Component.h"
+#include "Missile3Component.h"
 #include "CurrentMissileComponent.h"
 #include "LevelElementComponent.h"
+#include "StoneComponent.h"
+#include "TargetComponent.h"
 
 class Entity
 {
@@ -24,6 +28,8 @@ public:
     std::vector<Component*>& GetComponents();
 
     std::vector<Component::Tag>& GetTags();
+
+    bool HasComponent(Component::Tag);
 
 private:
     std::vector<Component*> components;

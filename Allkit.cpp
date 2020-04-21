@@ -82,6 +82,14 @@ void Allkit::Init()
     sprites[SPRT_BOX_HIT] = al_load_bitmap("./assets/images/box_hit.png");
     sprites[SPRT_STONE] = al_load_bitmap("./assets/images/stone.png");
     sprites[SPRT_STONE_HIT] = al_load_bitmap("./assets/images/stone_hit.png");
+    sprites[SPRT_CSTONE] = al_load_bitmap("./assets/images/stone_brick.png");
+    sprites[SPRT_FIRECHARGE] = al_load_bitmap("./assets/images/fire_charge.png");
+    sprites[SPRT_OBSIDIAN] = al_load_bitmap("./assets/images/obsidian.png");
+    sprites[SPRT_OBSIDIAN_HIT] = al_load_bitmap("./assets/images/obsidian_hit.png");
+    sprites[SPRT_SLIME1] = al_load_bitmap("./assets/images/slime1.png");
+    sprites[SPRT_SLIME2] = al_load_bitmap("./assets/images/slime2.png");
+    sprites[SPRT_BEE1] = al_load_bitmap("./assets/images/bee1.png");
+    sprites[SPRT_ROCK] = al_load_bitmap("./assets/images/rock.png");
 
     LoadLaunchSound();
 

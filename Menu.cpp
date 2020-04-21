@@ -5,6 +5,8 @@
 
 Menu::Menu(){
     ak_ = &Allkit::Get();
+    
+    //Add buttons to respective ButtonVector
     MainMenuButtons.push_back(Button("START",Point(450,100)));
     MainMenuButtons.push_back(Button("REPLAY",Point(450,200)));
     MainMenuButtons.push_back(Button("QUIT",Point(450,400)));
@@ -19,7 +21,7 @@ void Menu::Run()
 {
     exit_ = false;
     
-    // Menu loop
+    // Main Menu loop
     while (!exit_) {
         ak_->NextEvent();
         if(ak_->IsArrowKeyUpPushed()){
@@ -49,7 +51,7 @@ void Menu::StartGame()
 {
     std::cout << "StartButton Selected" << std::endl;
     Context context;
-    context.level = "./assets/levels/levelTest.txt";
+    context.level = "./assets/levels/level1.txt";
 
     Game game(context);
     
@@ -89,6 +91,7 @@ void Menu::LevelSelect(){
     selectedButton = 0;
 }
 
+//Update Screen with correct buttons
 void Menu::UpdateMenu(std::vector<Button> buttons){
     ak_->DrawScaledBitmap(background,0,0,BACKGROUND_WIDTH,BACKGROUND_HEIGHT,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
     for(unsigned int i =0;i<buttons.size();i++){
@@ -99,6 +102,7 @@ void Menu::UpdateMenu(std::vector<Button> buttons){
     ak_->DrawOnScreen();
 }
 
+//Simpel Button class
 Button::Button(std::string t,Point p){
     text = t;
     point = p;

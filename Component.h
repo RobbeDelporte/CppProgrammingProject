@@ -7,10 +7,14 @@ public:
     enum Tag {
         SPRITE,
         BOX,
+        STONE,
+        TARGET,
         LEVELELEMENT,
         MISSILEQUEUE,
         POSITION,
         MISSILE1,
+        MISSILE2,
+        MISSILE3,
         CURRENTMISSILE,
         NumComponents
     };

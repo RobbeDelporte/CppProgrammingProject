@@ -2,7 +2,6 @@
 #define MISSILE1COMPONENT_H
 
 #include "Component.h"
-#include "Point.h"
 
 class Missile1Component: public Component{
 public:

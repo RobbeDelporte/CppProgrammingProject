@@ -6,15 +6,11 @@
 
 class BoxComponent: public Component{
 public:
-    BoxComponent(){HitCounter = 0;BoxHit = false;};
+    BoxComponent(){};
 
     virtual ~BoxComponent(){};
 
     Tag GetTag(){return BOX;}
-
-    bool BoxHit;
-
-    int HitCounter;
 };
 
 #endif
