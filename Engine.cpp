@@ -41,6 +41,10 @@ std::vector<Entity*>& Engine::GetEntities() {
     return entities;
 }
 
+std::vector<System*>& Engine::GetSystems() {
+    return systems;
+}
+
 void Engine::Update() {
     for(System *s : systems){
         s->Update();

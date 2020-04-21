@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
+#include <time.h>
 
 void InitWsl(){
     std::ifstream inFile;
@@ -48,6 +49,7 @@ void InitWsl(){
 
 int main(int argc, char** argv) {
     InitWsl();
+    srand(time(0));
 
     Allkit::Get().Init();
     

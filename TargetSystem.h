@@ -11,6 +11,8 @@ class TargetSystem : public System {
     public:
         void Update();
 
+        virtual ~TargetSystem(){};
+
     private:
         bool CheckCollision(std::vector<Point>& coordinates_poly_one, std::vector<Point>& coordinates_poly_two);
 

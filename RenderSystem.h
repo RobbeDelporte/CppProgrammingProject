@@ -12,6 +12,8 @@ class RenderSystem : public System {
         RenderSystem(){
             ak_ = &Allkit::Get();
         }
+
+        virtual ~RenderSystem(){};
         
         void Update();
 
@@ -22,7 +24,7 @@ class RenderSystem : public System {
         void RenderStone(PositionComponent*,LevelElementComponent*);
         void RenderTarget(PositionComponent*,LevelElementComponent*,TargetComponent*);
         void RenderMissile1(PositionComponent*);
-        void RenderMissile2(PositionComponent*);
+        void RenderMissile2(PositionComponent*,Missile2Component*);
         void RenderMissile3(PositionComponent*);
 
 };

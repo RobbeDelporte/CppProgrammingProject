@@ -7,13 +7,14 @@
 
 class MissileSystem : public System {
     public:
-        MissileSystem(){
-        }
-        
+        MissileSystem(){}
+
+        virtual ~MissileSystem(){};
+
         void Update();
 
     private:
-        Point UpdatePosition(CurrentMissileComponent*,Point);
+        Point UpdatePosition(CurrentMissileComponent*,Point,Entity*);
 
         void UpdateSpeed(CurrentMissileComponent*);
 

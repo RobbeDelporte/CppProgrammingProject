@@ -33,6 +33,8 @@ public:
     
     std::vector<Entity*>& GetEntities();
 
+    std::vector<System*>& GetSystems();
+
     EntityStream& GetEntityStream();
 
     Context& GetContext();

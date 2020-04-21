@@ -56,6 +56,7 @@ void Menu::StartGame()
     Game game(context);
     
     game.Run();
+    
 }
 
 void Menu::LevelSelect(){

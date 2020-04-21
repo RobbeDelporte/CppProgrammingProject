@@ -21,7 +21,10 @@ enum Sprite {
     SPRT_OBSIDIAN_HIT,
     SPRT_SLIME1,
     SPRT_SLIME2,
+    SPRT_SLIME_HIT,
     SPRT_BEE1,
+    SPRT_BEE2,
+    SPRT_BEE3,
     SPRT_ROCK,
     SPRT_LENGTH
 };

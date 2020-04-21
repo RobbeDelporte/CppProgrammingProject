@@ -13,6 +13,9 @@ class LauncherSystem : public System {
         LauncherSystem(){
             ak_ = &Allkit::Get();
         }
+
+        virtual ~LauncherSystem(){};
+        
         void Update();
 
     private:
