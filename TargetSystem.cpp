@@ -4,12 +4,12 @@ void TargetSystem::Update() {
 
     EntityStream es = GetEngine()->GetEntityStream();
     Entity* currentMissile = *(es.WithTag(Component::CURRENTMISSILE).begin());
-    std::set<Entity*> boxTargets = es.WithTag(Component::BOX);
+    std::set<Entity*> levelElements = es.WithTag(Component::LEVELELEMENT);
 
     if(GetEngine()->GetContext().TargetsHit){
         //Verwijderd Geraakte Targets indien nodig
         //Indien Geen geraakte targets meer: TargetsHit = false
-        EvaluateTargets(boxTargets);
+        EvaluateTargets(levelElements);
     }
 
     if(currentMissile!=NULL){
@@ -25,16 +25,22 @@ void TargetSystem::Update() {
             if(currentMissile->GetComponent(Component::MISSILE1)!=NULL){
                 missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT)};
             }
+            else if(currentMissile->GetComponent(Component::MISSILE2)!=NULL){
+                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT)};
+            }
+            else if(currentMissile->GetComponent(Component::MISSILE3)!=NULL){
+                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT)};
+            }
 
-            for(Entity* boxTarget: boxTargets){
-                PositionComponent* bpc = dynamic_cast<PositionComponent*>(boxTarget->GetComponent(Component::POSITION));
+            for(Entity* levelElement: levelElements){
+                PositionComponent* bpc = dynamic_cast<PositionComponent*>(levelElement->GetComponent(Component::POSITION));
                 boxPoly = {bpc->position,Point(bpc->position.x_,bpc->position.y_-MISSILE_DST_HEIGHT),Point(bpc->position.x_+MISSILE_DST_WIDTH,bpc->position.y_),Point(bpc->position.x_+MISSILE_DST_WIDTH,bpc->position.y_-MISSILE_DST_HEIGHT)};
 
-                BoxComponent* bc = dynamic_cast<BoxComponent*>(boxTarget->GetComponent(Component::BOX));
+                LevelElementComponent* lec = dynamic_cast<LevelElementComponent*>(levelElement->GetComponent(Component::LEVELELEMENT));
 
                 if(CheckCollision(missilePoly,boxPoly)){
                     //Colision with box happend
-                    bc->BoxHit = true;
+                    lec->IsHit = true;
                     GetEngine()->GetContext().TargetsHit = true;
                     GetEngine()->RemoveEntity(currentMissile);
                     //delete currentMissile; TODO: FIX THIS
@@ -121,19 +127,22 @@ double TargetSystem::DistanceBetweenPolys(double min_dotp_poly_one, double max_d
     }
 }
 
-void TargetSystem::EvaluateTargets(std::set<Entity*> boxTargets){
+void TargetSystem::EvaluateTargets(std::set<Entity*> levelElements){
     std::cout<<"Evaluating target" << std::endl;
     int c = 0;
-    for(Entity* boxTarget:boxTargets){
-        LevelElementComponent* lec = dynamic_cast<LevelElementComponent*>(boxTarget->GetComponent(Component::LEVELELEMENT));
-        BoxComponent* bc = dynamic_cast<BoxComponent*>(boxTarget->GetComponent(Component::BOX));
-        if(bc->BoxHit){
-            bc->HitCounter += 1;
-            if(bc->HitCounter >= HITDURATION){
-                GetEngine()->RemoveEntity(boxTarget);
+    for(Entity* levelElement:levelElements){
+        LevelElementComponent* lec = dynamic_cast<LevelElementComponent*>(levelElement->GetComponent(Component::LEVELELEMENT));
+        if(lec->IsHit){
+            lec->HitCounter += 1;
+            if(lec->HitCounter >= HITDURATION && (levelElement->HasComponent(Component::BOX) || levelElement->HasComponent(Component::TARGET))){
+                GetEngine()->RemoveEntity(levelElement);
                 GetEngine()->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_] = NULL;
                 GetEngine()->GetContext().NeedLevelUpdate = true;
-                delete boxTarget;
+                delete levelElement;
+            }
+            else if(lec->HitCounter >= HITDURATION && levelElement->HasComponent(Component::STONE)){
+                lec->IsHit = false;
+                lec->HitCounter = 0;
             }
             else{
                 c += 1;

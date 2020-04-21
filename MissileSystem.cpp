@@ -13,8 +13,8 @@ void MissileSystem::Update(){
 }
 
 Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position){
-    position.x_ += cmc->xVelocity*(3/(5*FPS));
-    position.y_ += cmc->yVelocity*(3/(5*FPS));
+    position.x_ += cmc->xVelocity/VELOCITYPRESCALER;
+    position.y_ += cmc->yVelocity/VELOCITYPRESCALER;
 
     if(position.x_ < 0){
         position.x_ = 0;
