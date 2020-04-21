@@ -3,6 +3,7 @@
 
 #include "Point.h"
 #include "System.h"
+#include <iostream>
 
 class MissileSystem : public System {
     public:
@@ -15,6 +16,8 @@ class MissileSystem : public System {
         Point UpdatePosition(CurrentMissileComponent*,Point);
 
         void UpdateSpeed(CurrentMissileComponent*);
+
+        void ActivateSpecial(Entity*);
 };
 
 #endif

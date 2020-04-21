@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define FPS 30.0
+#define FPS 60.0
 
 #define DEBUG_MODE false
 
@@ -28,9 +28,9 @@
 #define LAUNCH_STRENGTH 8
 #define GRAVITYCONSTANT 15
 #define AIRFRICTIONCONSTANT 1.003
-#define VELOCITYPRESCALER 50
+#define VELOCITYPRESCALER 100
 
-#define HITDURATION 7
-#define TARGETANIMTIMING 20
+#define HITDURATION 15
+#define TARGETANIMTIMING 40
 
 #endif

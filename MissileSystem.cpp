@@ -5,10 +5,12 @@ void MissileSystem::Update(){
     std::set<Entity*> entities = es.WithTag(Component::CURRENTMISSILE);
     for(Entity* entity:entities){
         CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
-        Component* component = entity->GetComponent(Component::POSITION);
-        PositionComponent* pc= dynamic_cast<PositionComponent*>(component);
+        PositionComponent* pc= dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
         pc->position = UpdatePosition(cmc,pc->position);
         UpdateSpeed(cmc);
+        if(GetEngine()->keyInput == Engine::KEY_SPACE && cmc->SpecialActivated == false){
+            ActivateSpecial(entity);
+        }
     }
 }
 
@@ -31,6 +33,17 @@ Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position
 }
 
 void MissileSystem::UpdateSpeed(CurrentMissileComponent* cmc){
-    cmc->yVelocity -= GRAVITYCONSTANT;
-    cmc->xVelocity /= AIRFRICTIONCONSTANT;
+    if(cmc->SpecialActivated == false){
+        cmc->yVelocity -= GRAVITYCONSTANT;
+    }
+}
+
+void MissileSystem::ActivateSpecial(Entity* entity){
+    std::cout << "activating" << std::endl;
+    if(entity->HasComponent(Component::MISSILE2)){
+        CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
+        cmc->yVelocity = 0;
+        cmc->xVelocity = 800;
+        cmc->SpecialActivated = true;
+    }
 }
