@@ -47,13 +47,12 @@ void MissileSystem::ActivateSpecial(Entity* entity){
     if(entity->HasComponent(Component::MISSILE2)){
         CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
         cmc->yVelocity = 0;
-        cmc->xVelocity = 800;
+        cmc->xVelocity = 1200;
         cmc->SpecialActivated = true;
     }
     else if(entity->HasComponent(Component::MISSILE3)){
         CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
-        cmc->yVelocity = -800;
-        cmc->xVelocity = 200;
+        cmc->yVelocity = -1000;
         cmc->SpecialActivated = true;
     }
 }
