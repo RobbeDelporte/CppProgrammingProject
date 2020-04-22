@@ -26,7 +26,7 @@ class RenderSystem : public System {
         void RenderMissile1(PositionComponent*);
         void RenderMissile2(PositionComponent*,Missile2Component*);
         void RenderMissile3(PositionComponent*);
-
+        bool RenderExplosion(ExplosionEffectComponent*);
 };
 
 #endif

@@ -55,7 +55,7 @@ void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Poi
     GetEngine()->RemoveEntity(entity);
     entity->Remove(mqc);
     
-    double vx = std::min(LAUNCH_STRENGTH*(140 - ConvertMouse(mousepos).x_),1100.0);
+    double vx = std::min(LAUNCH_STRENGTH*(140 - ConvertMouse(mousepos).x_),1200.0);
     double vy = std::min(LAUNCH_STRENGTH*(230 - ConvertMouse(mousepos).y_),1000.0);
     std::cout << vx <<"  "<< vy <<std::endl;
 

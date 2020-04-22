@@ -15,6 +15,7 @@
 #include "LevelElementComponent.h"
 #include "StoneComponent.h"
 #include "TargetComponent.h"
+#include "ExplosionEffectComponent.h"
 
 class Entity
 {

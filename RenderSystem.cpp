@@ -58,6 +58,15 @@ void RenderSystem::Update(){
         PositionComponent* pc = dynamic_cast<PositionComponent*>(component);
         RenderMissile3(pc);
     }
+
+    entities = es.WithTag(Component::EXPLOSIONEFFECT);
+    for(Entity* entity: entities){
+        ExplosionEffectComponent* eec = dynamic_cast<ExplosionEffectComponent*>(entity->GetComponent(Component::EXPLOSIONEFFECT));
+        if(RenderExplosion(eec)){
+            GetEngine()->RemoveEntity(entity);
+            delete entity;
+        }
+    }
     ak_->DrawOnScreen();
 }
 
@@ -67,7 +76,7 @@ void RenderSystem::RenderSprite(SpriteComponent* sc){
 
 void RenderSystem::RenderBox(PositionComponent* pc,LevelElementComponent* lec){
     Sprite s;
-    lec->IsHit ? s=SPRT_BOX_HIT : s = SPRT_CSTONE; 
+    lec->IsHit ? s=SPRT_CSTONE_HIT : s = SPRT_CSTONE; 
     
     ak_->DrawScaledBitmap(s,0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,pc->position.x_,SCREEN_HEIGHT-pc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
 }
@@ -110,4 +119,19 @@ void RenderSystem::RenderMissile2(PositionComponent* pc,Missile2Component* mc){
 
 void RenderSystem::RenderMissile3(PositionComponent* pc){
     ak_->DrawScaledBitmap(SPRT_ROCK,0,0,MISSILE_SRC_WIDTH,MISSILE_SRC_HEIGHT,pc->position.x_,SCREEN_HEIGHT-pc->position.y_,MISSILE_DST_WIDTH,MISSILE_DST_HEIGHT);
+}
+
+bool RenderSystem::RenderExplosion(ExplosionEffectComponent* eec){
+    ak_->DrawScaledBitmap(eec->ExplosionAnim[eec->animStage],0,0,50,50,eec->position.x_-17,SCREEN_HEIGHT-eec->position.y_-17,70,70);
+    if(eec->animTiming>=EXPLOSIONANIMTIMING){
+        eec->animStage = (eec->animStage+1);
+        eec->animTiming = 0;
+        if((eec->animStage == eec->ExplosionAnim.size())){
+            return true;
+        }
+    }   
+    else{
+        eec->animTiming += 1;
+    }
+    return false;
 }

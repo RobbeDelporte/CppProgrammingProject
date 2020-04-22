@@ -47,6 +47,11 @@ void TargetSystem::Update() {
             }
             if(GetEngine()->GetContext().TargetsHit){
                 GetEngine()->RemoveEntity(currentMissile);
+                if(currentMissile->HasComponent(Component::MISSILE1)){
+                    Entity* e = new Entity;
+                    e->Add(new ExplosionEffectComponent(Point(mpc->position.x_,mpc->position.y_)));
+                    GetEngine()->AddEntity(e);
+                }
                 delete currentMissile;
             }
         }

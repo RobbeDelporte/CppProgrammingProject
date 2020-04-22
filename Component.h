@@ -16,6 +16,7 @@ public:
         MISSILE2,
         MISSILE3,
         CURRENTMISSILE,
+        EXPLOSIONEFFECT,
         NumComponents
     };
     virtual ~Component(){};

@@ -83,6 +83,7 @@ void Allkit::Init()
     sprites[SPRT_STONE] = al_load_bitmap("./assets/images/stone.png");
     sprites[SPRT_STONE_HIT] = al_load_bitmap("./assets/images/stone_hit.png");
     sprites[SPRT_CSTONE] = al_load_bitmap("./assets/images/stone_brick.png");
+    sprites[SPRT_CSTONE_HIT] = al_load_bitmap("./assets/images/brick_hit.png");
     sprites[SPRT_FIRECHARGE] = al_load_bitmap("./assets/images/fire_charge.png");
     sprites[SPRT_OBSIDIAN] = al_load_bitmap("./assets/images/obsidian.png");
     sprites[SPRT_OBSIDIAN_HIT] = al_load_bitmap("./assets/images/obsidian_hit.png");
@@ -93,6 +94,12 @@ void Allkit::Init()
     sprites[SPRT_BEE3] = al_load_bitmap("./assets/images/bee3.png");
     sprites[SPRT_ROCK] = al_load_bitmap("./assets/images/rock.png");
     sprites[SPRT_SLIME_HIT] = al_load_bitmap("./assets/images/slime_hit.png");
+    sprites[SPRT_EXPLOSION1] = al_load_bitmap("./assets/images/explosion1.png");
+    sprites[SPRT_EXPLOSION2] = al_load_bitmap("./assets/images/explosion2.png");
+    sprites[SPRT_EXPLOSION3] = al_load_bitmap("./assets/images/explosion3.png");
+    sprites[SPRT_EXPLOSION4] = al_load_bitmap("./assets/images/explosion4.png");
+    sprites[SPRT_EXPLOSION5] = al_load_bitmap("./assets/images/explosion5.png");
+
 
     LoadLaunchSound();
 
