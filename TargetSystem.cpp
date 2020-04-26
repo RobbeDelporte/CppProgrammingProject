@@ -26,10 +26,10 @@ void TargetSystem::Update() {
                 missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_+MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_)};
             }
             else if(currentMissile->GetComponent(Component::MISSILE2)!=NULL){
-                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_)};
+                missilePoly = {Point(mpc->position.x_,mpc->position.y_+6),Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT-4),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT-4),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_+6)};
             }
             else if(currentMissile->GetComponent(Component::MISSILE3)!=NULL){
-                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_)};
+                missilePoly = {Point(mpc->position.x_+MISSILE_DST_WIDTH/2,mpc->position.y_),Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT)};
             }
 
             for(Entity* levelElement: levelElements){

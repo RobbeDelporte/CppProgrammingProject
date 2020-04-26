@@ -18,21 +18,33 @@ Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position
     position.x_ += cmc->xVelocity/VELOCITYPRESCALER;
     position.y_ += cmc->yVelocity/VELOCITYPRESCALER;
 
+    
+
     if(position.x_ < 0){
         GetEngine()->GetContext().LoadNextMissile = true;
         GetEngine()->RemoveEntity(entity);
         delete entity;
     }
+
     else if(position.x_ > SCREEN_WIDTH){ //900 - 35
         GetEngine()->GetContext().LoadNextMissile = true;
         GetEngine()->RemoveEntity(entity);
         delete entity;
     }
-
     if(position.y_ < 90 + MISSILE_DST_HEIGHT){ //90 + 35
+        if(entity->HasComponent(Component::MISSILE1)){
+            cmc->yVelocity = cmc->yVelocity*(-0.8);
+        }
+        else if(entity->HasComponent(Component::MISSILE3)){
+            cmc->xVelocity *= (0.8);
+            if(cmc->xVelocity<=0){
+                GetEngine()->GetContext().LoadNextMissile = true;
+                GetEngine()->RemoveEntity(entity);
+                delete(entity);
+            }
+        }
         position.y_ = 90 + MISSILE_DST_HEIGHT;
     }
-    
     return position;
 }
 
