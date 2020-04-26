@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "Constants.h"
 #include "vector"
+#include "Allkit.h"
 
 class TargetComponent: public Component{
 public:

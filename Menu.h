@@ -3,6 +3,7 @@
 
 #include "Allkit.h"
 #include "Constants.h"
+#include "Context.h"
 
 class Button;
 
@@ -14,7 +15,7 @@ public:
     // Start the menu loop
     void Run();
 
-    void StartGame();
+    void StartGame(Context);
 
     void UpdateMenu(std::vector<Button>);
 
