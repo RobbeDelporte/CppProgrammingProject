@@ -23,13 +23,13 @@ void TargetSystem::Update() {
             std::vector<Point> missilePoly;
             std::vector<Point> boxPoly;
             if(currentMissile->GetComponent(Component::MISSILE1)!=NULL){
-                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT)};
+                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_+MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_)};
             }
             else if(currentMissile->GetComponent(Component::MISSILE2)!=NULL){
-                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT)};
+                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_)};
             }
             else if(currentMissile->GetComponent(Component::MISSILE3)!=NULL){
-                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT)};
+                missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_)};
             }
 
             for(Entity* levelElement: levelElements){
