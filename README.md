@@ -7,7 +7,6 @@ Via volgende [link](https://cloud.ilabt.imec.be/index.php/s/9tRJKTsjnW8oGEX), di
 
 Veel succes :+1:
 
-test test test azertyu
 
 ### Updates:
 
@@ -21,5 +20,3 @@ test test test azertyu
 
 8-4-2020: Update Opgave blz. 7 + 8 (verduidelijking `Engine::UpdateEntity` en `EntityStream::EntityUpdated`)
 
-test 123
-bezig met testen
