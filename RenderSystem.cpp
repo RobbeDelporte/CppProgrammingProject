@@ -1,7 +1,6 @@
 #include "RenderSystem.h"
 
 void RenderSystem::Update(){
-    ak_->ClearScreen();
     ak_->DrawScaledBitmap(Sprite::SPRT_BACKGROUND,0,0,BACKGROUND_WIDTH,BACKGROUND_HEIGHT,0,0,SCREEN_WIDTH, SCREEN_HEIGHT);
 
     EntityStream es = GetEngine()->GetEntityStream();
