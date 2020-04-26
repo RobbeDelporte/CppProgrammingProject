@@ -6,6 +6,7 @@ void RenderSystem::Update(){
     EntityStream es = GetEngine()->GetEntityStream();
     std::set<Entity*> entities;
 
+
     entities = es.WithTag(Component::SPRITE);
     for(Entity* entity: entities){
         Component* component = entity->GetComponent(Component::SPRITE);
@@ -66,6 +67,38 @@ void RenderSystem::Update(){
             delete entity;
         }
     }
+
+    if(DEBUG_MODE==true){
+        std::set<Component::Tag> tags = {Component::BOX,Component::STONE,Component::TARGET};
+        entities = es.WithTagsOR(tags);
+        for(Entity* entity:entities){
+            PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
+            std::vector<Point> poly = {Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_),Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_)};
+            ak_->DrawPoly(poly);
+        }
+
+        entities = es.WithTag(Component::MISSILE1);
+        for(Entity* entity:entities){
+            PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
+            std::vector<Point> poly = {Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_),Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_)};
+            ak_->DrawPoly(poly);
+        }
+
+        entities = es.WithTag(Component::MISSILE2);
+        for(Entity* entity:entities){
+            PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
+            std::vector<Point> poly = {Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_),Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_)};
+            ak_->DrawPoly(poly);
+        }
+
+        entities = es.WithTag(Component::MISSILE3);
+        for(Entity* entity:entities){
+            PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
+            std::vector<Point> poly = {Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_),Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_)};
+            ak_->DrawPoly(poly);
+        }
+    }
+    
     ak_->DrawOnScreen();
 }
 

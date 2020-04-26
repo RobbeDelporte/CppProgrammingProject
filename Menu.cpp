@@ -1,4 +1,3 @@
-#include "Context.h"
 #include "Game.h"
 #include "Menu.h"
 #include <iostream>
@@ -47,11 +46,10 @@ void Menu::Run()
     }
 }
 
-void Menu::StartGame()
+void Menu::StartGame(Context context)
 {
     std::cout << "StartButton Selected" << std::endl;
-    Context context;
-    context.level = "./assets/levels/level1.txt";
+
 
     Game game(context);
     
@@ -74,7 +72,19 @@ void Menu::LevelSelect(){
         }
         else if(ak_->IsEnterKeyPushed()){
             if(selectedButton==0){
-                StartGame();
+                Context context;
+                context.level = "./assets/levels/level1.txt";
+                StartGame(context);
+            }
+            else if(selectedButton==1){
+                Context context;
+                context.level = "./assets/levels/level2.txt";
+                StartGame(context);
+            }
+            else if(selectedButton==2){
+                Context context;
+                context.level = "./assets/levels/level3.txt";
+                StartGame(context);
             }
             else if(selectedButton==3){
                 exit_ = true;
