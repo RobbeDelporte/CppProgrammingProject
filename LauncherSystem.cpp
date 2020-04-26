@@ -23,7 +23,7 @@ void LauncherSystem::Update(){
         if(mqc->queuenumber==0){
             Component* component = entity->GetComponent(Component::POSITION);
             PositionComponent* pc= dynamic_cast<PositionComponent*>(component);
-            if(MissileSelected(pc,mouseInput,keyInput)){
+            if(MissileSelected(entity,mouseInput,keyInput)){
                 mqc->selected = true;
             }
             else if(mqc->selected == true && keyInput == Engine::KEY_MOUSE_UP){
@@ -41,10 +41,19 @@ Point LauncherSystem::ConvertMouse(Point p){
     return Point(p.x_-(MISSILE_DST_HEIGHT/2),SCREEN_HEIGHT-p.y_+(MISSILE_DST_HEIGHT/2));
 }
 
-bool LauncherSystem::MissileSelected(PositionComponent* pc,Point mouseInput,Engine::KEY_PRESSED keyInput){
+bool LauncherSystem::MissileSelected(Entity* entity,Point mouseInput,Engine::KEY_PRESSED keyInput){
+    PositionComponent* pc= dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
     //Cirkel hitbox
-    if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN){
+    if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE1)){
         return true;
+    }
+    else if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE2)){
+        return true;
+        //TODO Fix hitbox
+    }
+    else if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE3)){
+        return true;
+        //TODO fix hitbox
     }
     else{
         return false;
