@@ -26,5 +26,8 @@
   Een apparte timer is waarsch onontkoombaar in de replay.cpp main gameloop
 
 ### Commentaar toevoegen
-
+  -Code leesbaardermaken
+  
+### Verslag schrijven
+  - 
 
