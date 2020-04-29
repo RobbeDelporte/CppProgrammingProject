@@ -12,6 +12,7 @@
 ### Een live timer toevoegen en op het scherm tonen
   - Bij begin van de game een counter in de context waarbij elke update upgeteld wordt
   - de counter op 60 is dan 1sec, afhenkelijk van FPS
+  - Kan ook in de context bijgehouden worden
   
 ### REPLAY SYSTEM
   - inputs bijhouden in een file
