@@ -1,8 +1,8 @@
 #include "LevelSystem.h"
 
 void LevelSystem::Update(){
-    if(GetEngine()->GetContext().NeedLevelUpdate){
-        std::vector<std::vector<Entity*>> levelmatrix = GetEngine()->GetContext().levelmatrix_;
+    if(engine_->GetContext().NeedLevelUpdate){
+        std::vector<std::vector<Entity*>> levelmatrix = engine_->GetContext().levelmatrix_;
         for(int x = 0;x<8;x++){
             for(int y = 7;y>=0;y--){
                 if(levelmatrix[x][y]==NULL){
@@ -19,7 +19,7 @@ void LevelSystem::Update(){
                 }
             }
         }
-        GetEngine()->GetContext().levelmatrix_ = levelmatrix;
-        GetEngine()->GetContext().NeedLevelUpdate = false;
+        engine_->GetContext().levelmatrix_ = levelmatrix;
+        engine_->GetContext().NeedLevelUpdate = false;
     }
 }

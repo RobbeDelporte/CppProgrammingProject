@@ -3,7 +3,7 @@
 void RenderSystem::Update(){
     ak_->DrawScaledBitmap(Sprite::SPRT_BACKGROUND,0,0,BACKGROUND_WIDTH,BACKGROUND_HEIGHT,0,0,SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    EntityStream es = GetEngine()->GetEntityStream();
+    EntityStream es = engine_->GetEntityStream();
     std::set<Entity*> entities;
 
 
@@ -63,7 +63,7 @@ void RenderSystem::Update(){
     for(Entity* entity: entities){
         ExplosionEffectComponent* eec = dynamic_cast<ExplosionEffectComponent*>(entity->GetComponent(Component::EXPLOSIONEFFECT));
         if(RenderExplosion(eec)){
-            GetEngine()->RemoveEntity(entity);
+            engine_->RemoveEntity(entity);
             delete entity;
         }
     }
