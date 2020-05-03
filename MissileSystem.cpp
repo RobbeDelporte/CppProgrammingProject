@@ -1,13 +1,13 @@
 #include "MissileSystem.h"
 
 void MissileSystem::Update(){
-    EntityStream es = GetEngine()->GetEntityStream();
+    EntityStream es = engine_->GetEntityStream();
     std::set<Entity*> entities = es.WithTag(Component::CURRENTMISSILE);
     for(Entity* entity:entities){
         CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
         PositionComponent* pc= dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
         UpdateSpeed(cmc);
-        if(GetEngine()->keyInput == Engine::KEY_SPACE && cmc->SpecialActivated == false){
+        if(engine_->keyInput == Engine::KEY_SPACE && cmc->SpecialActivated == false){
             ActivateSpecial(entity);
         }
         pc->position = UpdatePosition(cmc,pc->position,entity);
@@ -21,14 +21,14 @@ Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position
     
 
     if(position.x_ < 0){
-        GetEngine()->GetContext().LoadNextMissile = true;
-        GetEngine()->RemoveEntity(entity);
+        engine_->GetContext().LoadNextMissile = true;
+        engine_->RemoveEntity(entity);
         delete entity;
     }
 
     else if(position.x_ > SCREEN_WIDTH){ //900 - 35
-        GetEngine()->GetContext().LoadNextMissile = true;
-        GetEngine()->RemoveEntity(entity);
+        engine_->GetContext().LoadNextMissile = true;
+        engine_->RemoveEntity(entity);
         delete entity;
     }
     if(position.y_ < 90 + MISSILE_DST_HEIGHT){ //90 + 35

@@ -2,11 +2,11 @@
 
 void TargetSystem::Update() {
 
-    EntityStream es = GetEngine()->GetEntityStream();
+    EntityStream es = engine_->GetEntityStream();
     Entity* currentMissile = *(es.WithTag(Component::CURRENTMISSILE).begin());
     std::set<Entity*> levelElements = es.WithTag(Component::LEVELELEMENT);
 
-    if(GetEngine()->GetContext().TargetsHit){
+    if(engine_->GetContext().TargetsHit){
         //Verwijderd Geraakte Targets indien nodig
         //Indien Geen geraakte targets meer: TargetsHit = false
         EvaluateTargets(levelElements);
@@ -41,16 +41,16 @@ void TargetSystem::Update() {
                 if(CheckCollision(missilePoly,boxPoly)){
                     //Colision with box happend
                     lec->IsHit = true;
-                    GetEngine()->GetContext().TargetsHit = true;
-                    GetEngine()->GetContext().LoadNextMissile = true;
+                    engine_->GetContext().TargetsHit = true;
+                    engine_->GetContext().LoadNextMissile = true;
                 }
             }
-            if(GetEngine()->GetContext().TargetsHit){
-                GetEngine()->RemoveEntity(currentMissile);
+            if(engine_->GetContext().TargetsHit){
+                engine_->RemoveEntity(currentMissile);
                 if(currentMissile->HasComponent(Component::MISSILE1)){
                     Entity* e = new Entity;
                     e->Add(new ExplosionEffectComponent(Point(mpc->position.x_,mpc->position.y_)));
-                    GetEngine()->AddEntity(e);
+                    engine_->AddEntity(e);
                 }
                 delete currentMissile;
             }
@@ -142,9 +142,9 @@ void TargetSystem::EvaluateTargets(std::set<Entity*> levelElements){
         if(lec->IsHit){
             lec->HitCounter += 1;
             if(lec->HitCounter >= HITDURATION && (levelElement->HasComponent(Component::BOX) || levelElement->HasComponent(Component::TARGET))){
-                GetEngine()->RemoveEntity(levelElement);
-                GetEngine()->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_] = NULL;
-                GetEngine()->GetContext().NeedLevelUpdate = true;
+                engine_->RemoveEntity(levelElement);
+                engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_] = NULL;
+                engine_->GetContext().NeedLevelUpdate = true;
                 delete levelElement;
             }
             else if(lec->HitCounter >= HITDURATION && levelElement->HasComponent(Component::STONE)){
@@ -158,6 +158,6 @@ void TargetSystem::EvaluateTargets(std::set<Entity*> levelElements){
     }
     if(c == 0){
         //Geen targets meer die geraakt zijn
-        GetEngine()->GetContext().TargetsHit = false;
+        engine_->GetContext().TargetsHit = false;
     }
 }

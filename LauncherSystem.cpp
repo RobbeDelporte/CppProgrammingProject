@@ -4,17 +4,17 @@
 
 
 void LauncherSystem::Update(){
-    EntityStream es = GetEngine()->GetEntityStream();
+    EntityStream es = engine_->GetEntityStream();   
     std::set<Entity*> entities;
     entities = es.WithTag(Component::MISSILEQUEUE);
 
-    if(GetEngine()->GetContext().LoadNextMissile){
+    if(engine_->GetContext().LoadNextMissile){  
         UpdateQueue(entities);
     }
 
-    Point mouseInput = GetEngine()->mouseinput;
+    Point mouseInput = engine_->mouseinput;
 
-    Engine::KEY_PRESSED keyInput = GetEngine()->keyInput;
+    Engine::KEY_PRESSED keyInput = engine_->keyInput;
 
     for(Entity* entity:entities){
 
@@ -61,7 +61,7 @@ bool LauncherSystem::MissileSelected(Entity* entity,Point mouseInput,Engine::KEY
 }
 
 void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Point mousepos){
-    GetEngine()->RemoveEntity(entity);
+    engine_->RemoveEntity(entity);
     entity->Remove(mqc);
     
     double vx = std::min(LAUNCH_STRENGTH*(140 - ConvertMouse(mousepos).x_),1200.0);
@@ -69,7 +69,7 @@ void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Poi
     std::cout << vx <<"  "<< vy <<std::endl;
 
     entity->Add(new CurrentMissileComponent(vx,vy));
-    GetEngine()->AddEntity(entity);
+    engine_->AddEntity(entity);
 }
 
 void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
@@ -98,6 +98,6 @@ void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
         me->Add(new Missile3Component());
     }
     me->Add(new MissileQueueComponent());
-    GetEngine()->AddEntity(me);
-    GetEngine()->GetContext().LoadNextMissile = false;
+    engine_->AddEntity(me);
+    engine_->GetContext().LoadNextMissile = false;
 }
