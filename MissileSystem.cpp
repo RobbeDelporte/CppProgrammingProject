@@ -32,18 +32,19 @@ Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position
         delete entity;
     }
     if(position.y_ < 90 + MISSILE_DST_HEIGHT){ //90 + 35
+        position.y_ = 90 + MISSILE_DST_HEIGHT;
+
         if(entity->HasComponent(Component::MISSILE1)){
             cmc->yVelocity = cmc->yVelocity*(-0.8);
         }
         else if(entity->HasComponent(Component::MISSILE3)){
             cmc->xVelocity *= (0.8);
-            if(cmc->xVelocity<=0){
-                engine_->GetContext().LoadNextMissile = true;
-                engine_->RemoveEntity(entity);
+            if(abs(cmc->xVelocity)<0.1){
+                GetEngine()->GetContext().LoadNextMissile = true;
+                GetEngine()->RemoveEntity(entity);
                 delete(entity);
             }
         }
-        position.y_ = 90 + MISSILE_DST_HEIGHT;
     }
     return position;
 }
