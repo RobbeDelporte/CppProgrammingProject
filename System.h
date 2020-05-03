@@ -15,8 +15,6 @@ public:
 
     void SetEngine(Engine* engine){engine_ = engine;};
 
-    // mag weg?Engine* GetEngine(){return engine_;}
-
 protected:
     Engine* engine_;
 };

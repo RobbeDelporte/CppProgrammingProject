@@ -40,8 +40,8 @@ Point MissileSystem::UpdatePosition(CurrentMissileComponent* cmc, Point position
         else if(entity->HasComponent(Component::MISSILE3)){
             cmc->xVelocity *= (0.8);
             if(abs(cmc->xVelocity)<0.1){
-                GetEngine()->GetContext().LoadNextMissile = true;
-                GetEngine()->RemoveEntity(entity);
+                engine_->GetContext().LoadNextMissile = true;
+                engine_->RemoveEntity(entity);
                 delete(entity);
             }
         }
