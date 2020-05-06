@@ -26,16 +26,9 @@ std::set<Entity*> EntityStream::WithTagsOR(std::set<Component::Tag>& tags) {
 void EntityStream::EntityUpdated(Entity* entity, std::vector<Component::Tag>& tags, bool remove) {
     if(not(remove)){
         for(Component::Tag tag: tags){
-            if(map.count(tag)==0){
-                std::set<Entity*> entities;
-                entities.insert(entity);
-                map.insert(std::pair<Component::Tag,std::set<Entity*>>(tag,entities));
-            }
-            else{
-                std::set<Entity*> temp = map.at(tag);
-                temp.insert(entity);
-                map.at(tag) = temp;
-            }
+            std::set<Entity*> temp = map.at(tag);
+            temp.insert(entity);
+            map.at(tag) = temp;
         }
     }
     else{        
