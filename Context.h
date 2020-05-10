@@ -15,6 +15,8 @@ public:
     bool TargetsHit = false;
 
     bool NeedLevelUpdate = false;
+    
+    int targetcounter;   // dit is om te weten wanneer het spel is afgelopen, komt hij op 0 dan is het level gedaan
 };
 
 #endif
