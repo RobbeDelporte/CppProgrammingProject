@@ -1,7 +1,6 @@
 #include "Game.h"
 
 bool Game::Run() {
-    std::cout<<"targets:"<<context_.targetcounter<<std::endl;//debuggen 
 
     exit_ = false;
     SetupSystems();
@@ -43,10 +42,11 @@ bool Game::Run() {
             ak_->StopTimer();
             exit_= true;
         }
-        if (context_.targetcounter==0){ //nieuw als targetcounter == 0 dan level gedaan
+        if (engine_.GetContext().targetcounter==0){
             ak_->StopTimer();
-            exit_= true;
+            exit_=true;
         }
+        
     }
     
 
@@ -92,7 +92,7 @@ void Game::LoadLevel(){
     char c;
     int i =0;
     int mx,my,rx,ry;
-    context_.targetcounter=0;
+    engine_.GetContext().targetcounter=0;
     while(inFile >> c){
         mx = i%8;
         my = 7 - floor(i/8);
@@ -113,7 +113,7 @@ void Game::LoadLevel(){
         else if(c == 'T'){
             entity->Add(new TargetComponent());
             engine_.AddEntity(entity);
-            context_.targetcounter+=1; //nieuw, telt alle targets, per verwijderde (dus voldoende geraakt) target gaat er weer 1 af            
+            engine_.GetContext().targetcounter+=1; //nieuw, telt alle targets, per verwijderde (dus voldoende geraakt) target gaat er weer 1 af            
         }                               // totdat targetconuter==0 , dan weer quit
         else{
             entity = NULL;
@@ -122,7 +122,7 @@ void Game::LoadLevel(){
         engine_.GetContext().levelmatrix_[mx][my] = entity;
         i++;
     }
-    std::cout <<"aantaltargets"<<" "<<context_.targetcounter<< std::endl; //mag weg: gewoon voor debuggen
+    std::cout <<"aantaltargets"<<" "<<engine_.GetContext().targetcounter<< std::endl; //mag weg: gewoon voor debuggen
     inFile.close();
 }
 

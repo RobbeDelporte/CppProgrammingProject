@@ -15,7 +15,7 @@ public:
     // Start the menu loop
     void Run();
 
-    void StartGame(Context);
+    void StartGame(Context&);
 
     void UpdateMenu(std::vector<Button>);
 

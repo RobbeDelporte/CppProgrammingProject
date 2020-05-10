@@ -26,6 +26,8 @@ class RenderSystem : public System {
         void RenderMissile1(PositionComponent*);
         void RenderMissile2(PositionComponent*,Missile2Component*);
         void RenderMissile3(PositionComponent*);
+        void Render_elastic_attached(PositionComponent*);
+        void Render_elastic_not_attached(void);
         bool RenderExplosion(ExplosionEffectComponent*);
 };
 

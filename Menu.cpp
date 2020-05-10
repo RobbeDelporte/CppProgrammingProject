@@ -50,7 +50,7 @@ void Menu::Run()
     }
 }
 
-void Menu::StartGame(Context context)
+void Menu::StartGame(Context& context) 
 {
     std::cout << "StartButton Selected" << std::endl;
 
