@@ -33,6 +33,10 @@ void Menu::Run()
             if(selectedButton==0){
                 LevelSelect();
             }
+            /* replay   to do
+            else if(selectedButton==1){
+
+            }*/
             else if(selectedButton==2){
                 exit_ = true;
             }
@@ -46,7 +50,7 @@ void Menu::Run()
     }
 }
 
-void Menu::StartGame(Context context)
+void Menu::StartGame(Context& context) 
 {
     std::cout << "StartButton Selected" << std::endl;
 
@@ -61,7 +65,7 @@ void Menu::LevelSelect(){
     exit_ = false;
     selectedButton = 0;
     
-    // Menu loop
+    // Level Menu loop
     while (!exit_) {
         ak_->NextEvent();
         if(ak_->IsArrowKeyUpPushed()){

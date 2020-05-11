@@ -142,10 +142,16 @@ void TargetSystem::EvaluateTargets(std::set<Entity*> levelElements){
         if(lec->IsHit){
             lec->HitCounter += 1;
             if(lec->HitCounter >= HITDURATION && (levelElement->HasComponent(Component::BOX) || levelElement->HasComponent(Component::TARGET))){
+                if (levelElement->HasComponent(Component::TARGET)){
+                    engine_->GetContext().targetcounter-=1;//nieuw per geraakte target targetcounter -1
+                    std::cout<<"aantal targets over:"<<" "<<engine_->GetContext().targetcounter<<std::endl;// enkel voor debuggen
+                     
+                }
                 engine_->RemoveEntity(levelElement);
                 engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_] = NULL;
                 engine_->GetContext().NeedLevelUpdate = true;
                 delete levelElement;
+
             }
             else if(lec->HitCounter >= HITDURATION && levelElement->HasComponent(Component::STONE)){
                 lec->IsHit = false;

@@ -1,6 +1,7 @@
 #include "Game.h"
 
 bool Game::Run() {
+
     exit_ = false;
     SetupSystems();
     LoadLevel();
@@ -41,6 +42,11 @@ bool Game::Run() {
             ak_->StopTimer();
             exit_= true;
         }
+        if (engine_.GetContext().targetcounter==0){
+            ak_->StopTimer();
+            exit_=true;
+        }
+        
     }
     
 
@@ -86,9 +92,8 @@ void Game::LoadLevel(){
     char c;
     int i =0;
     int mx,my,rx,ry;
-    
+    engine_.GetContext().targetcounter=0;
     while(inFile >> c){
-
         mx = i%8;
         my = 7 - floor(i/8);
         rx = 600 + 35*mx;
@@ -108,7 +113,8 @@ void Game::LoadLevel(){
         else if(c == 'T'){
             entity->Add(new TargetComponent());
             engine_.AddEntity(entity);
-        }
+            engine_.GetContext().targetcounter+=1; //nieuw, telt alle targets, per verwijderde (dus voldoende geraakt) target gaat er weer 1 af            
+        }                               // totdat targetconuter==0 , dan weer quit
         else{
             entity = NULL;
         }
@@ -116,6 +122,7 @@ void Game::LoadLevel(){
         engine_.GetContext().levelmatrix_[mx][my] = entity;
         i++;
     }
+    std::cout <<"aantaltargets"<<" "<<engine_.GetContext().targetcounter<< std::endl; //mag weg: gewoon voor debuggen
     inFile.close();
 }
 

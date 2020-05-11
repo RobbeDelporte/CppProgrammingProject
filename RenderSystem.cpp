@@ -99,8 +99,24 @@ void RenderSystem::Update(){
         }
     }
 
+    entities = es.WithTag(Component::MISSILEQUEUE);
+    bool controlflag = false;
+    for (Entity* entity:entities){
+        MissileQueueComponent* mqc = dynamic_cast<MissileQueueComponent*>(entity->GetComponent(Component::MISSILEQUEUE));
+        if (mqc->queuenumber==0){
+            PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
+            Render_elastic_attached(pc);
+            controlflag = true;
+            break;
+        }
+    }
+    if (controlflag==false){
+        Render_elastic_not_attached();
+    }
+
     ak_->DrawOnScreen();
 }
+
 
 void RenderSystem::RenderSprite(SpriteComponent* sc){
     ak_->DrawScaledBitmap(sc->sprite,0,0,LAUNCHER_SRC_WIDTH,LAUNCHER_SRC_HEIGHT,sc->position.x_,SCREEN_HEIGHT-sc->position.y_,LAUNCHER_DST_WIDTH,LAUNCHER_DST_HEIGHT);
@@ -166,4 +182,28 @@ bool RenderSystem::RenderExplosion(ExplosionEffectComponent* eec){
         eec->animTiming += 1;
     }
     return false;
+}
+void RenderSystem::Render_elastic_not_attached(void){
+    Point a = Point(121, 233);  //a= punt vast aan linkertak vanboven 
+    Point b = Point(125,257);  //b = knoop vast aan linkertak vanonder
+    Point c = Point(199,257); //c= punt vast aan rechtertak vanboven
+    Point d = Point(196,263); //d=punt vast aan rechtertak vanonder
+
+    ak_->DrawLine(a,c); //we verbinden de bovenste twee punten
+    ak_->DrawLine(b,d); //verbinde de onderste twee punten
+}
+void RenderSystem::Render_elastic_attached(PositionComponent* pc){
+    Point a = Point(121, 233);  //a= punt vast aan linkertak vanboven 
+    Point b = Point(125,257);  //b = knoop vast aan linkertak vanonder
+    Point c = Point(199,257); //c= punt vast aan rechtertak vanboven
+    Point d = Point(196,263); //d=punt vast aan rechtertak vanonder
+    int xco = pc->position.x_+MISSILE_DST_WIDTH/2 ;
+    int yco_boven = SCREEN_HEIGHT-pc->position.y_;
+    int yco_beneden = SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT;
+    Point p1 = Point(xco, yco_boven);
+    Point p2 = Point(xco, yco_beneden);
+    ak_->DrawLine(a, p1);
+    ak_->DrawLine(c, p1);
+    ak_->DrawLine(b, p2);
+    ak_->DrawLine(d, p2);
 }
