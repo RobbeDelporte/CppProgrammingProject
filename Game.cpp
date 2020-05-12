@@ -21,45 +21,21 @@ bool Game::Run() {
 
         //The eventqueue gets read out as fast as possible
         //When the update us called, the most recent mouse and keyinput get passed on via the context
-        if(not(engine_.GetContext().replay)){
-            if(ak_->IsSpaceBarPushed()){
-                engine_.keyInput = Engine::KEY_SPACE;
-            }
-            else if(ak_->IsMouseClicked()){
-                engine_.keyInput = Engine::KEY_MOUSE_DOWN;
-            }
-            else if(ak_->IsMouseReleased()){
-                engine_.keyInput = Engine::KEY_MOUSE_UP;
-            }
-            else if(ak_->HasMouseMoved()){
-                engine_.mouseinput = ak_->GetMouse();
-            }
+        if(ak_->IsSpaceBarPushed()){
+            engine_.keyInput = Engine::KEY_SPACE;
+        }
+        else if(ak_->IsMouseClicked()){
+            engine_.keyInput = Engine::KEY_MOUSE_DOWN;
+        }
+        else if(ak_->IsMouseReleased()){
+            engine_.keyInput = Engine::KEY_MOUSE_UP;
+        }
+        else if(ak_->HasMouseMoved()){
+            engine_.mouseinput = ak_->GetMouse();
         }
 
         //the update is called when the event is a timerevent
         if(ak_->IsTimerEvent()){
-            Context context = engine_.GetContext();
-            context.timer += 1;
-            if(not(context.replay)){
-                engine_.GetContext().missiles.push_back(std::to_string(engine_.mouseinput.x_) += std::string(" ") += std::to_string(engine_.mouseinput.y_));
-                if(engine_.keyInput = Engine::KEY_MOUSE_DOWN){
-                    engine_.GetContext().missiles.push_back(std::string("MOUSE_DOWN"));
-                }
-                else if(engine_.keyInput == Engine::KEY_MOUSE_UP){
-                    engine_.GetContext().missiles.push_back(std::string("MOUSE_UP"));
-                }
-                else if(engine_.keyInput == Engine::KEY_SPACE){
-                    engine_.GetContext().missiles.push_back(std::string("SPACE"));
-                }
-                else{
-                    engine_.GetContext().missiles.push_back(std::string("NONE"));
-                }
-            }
-            else{
-                float x; float y; char c;
-                std::stringstream(engine_.GetContext().missiles[engine_.GetContext().inputPointer]) >> x >> c >> y;
-            }
-
             engine_.Update();
             engine_.keyInput = Engine::KEY_NONE;
         }
