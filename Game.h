@@ -33,9 +33,11 @@ public:
 
     bool Run();
 
-    void SetupSystems();
+    void EndGame();
 
-    void ReadLevelMatrix();
+    void ReadHighscoreFile();
+
+    void SetupSystems();
 
     void LoadLevel();
 
