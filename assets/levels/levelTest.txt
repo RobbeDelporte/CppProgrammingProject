@@ -1,8 +1,8 @@
-B B E E E E E E
-B B E E E E E E
-B B E E E E E E
-B B E E E E E E
-B B B E E E E E
-B B B E E E E E
-B B B E E E E E
-B B B E E E E E
+B B B B B B B B
+B B B B B B B B
+B B B B B B B B
+T T B B B B B B
+T T B B B B B B
+B B B B B B B B
+B B B B B B B B
+B B B B B B B B

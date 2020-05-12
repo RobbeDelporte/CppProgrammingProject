@@ -61,11 +61,12 @@ bool LauncherSystem::MissileSelected(Entity* entity,Point mouseInput,Engine::KEY
 }
 
 void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Point mousepos){
+    ak_->PlayLaunchSound();
     engine_->RemoveEntity(entity);
     entity->Remove(mqc);
     
     double vx = std::min(LAUNCH_STRENGTH*(140 - ConvertMouse(mousepos).x_),1200.0);
-    double vy = std::min(LAUNCH_STRENGTH*(230 - ConvertMouse(mousepos).y_),1000.0);
+    double vy = std::min(LAUNCH_STRENGTH*(220 - ConvertMouse(mousepos).y_),1000.0);
     std::cout << vx <<"  "<< vy <<std::endl;
 
     entity->Add(new CurrentMissileComponent(vx,vy));
@@ -78,7 +79,7 @@ void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
         PositionComponent* mc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
         mqc->queuenumber -= 1;
             if(mqc->queuenumber==0){
-                mc->position = Point(140,230);
+                mc->position = Point(140,220);
             }
             else{
                 mc->position = Point(80-40*(mqc->queuenumber-1),125);

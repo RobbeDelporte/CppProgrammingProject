@@ -7,21 +7,25 @@ void TargetSystem::Update() {
     std::set<Entity*> levelElements = es.WithTag(Component::LEVELELEMENT);
 
     if(engine_->GetContext().TargetsHit){
-        //Verwijderd Geraakte Targets indien nodig
-        //Indien Geen geraakte targets meer: TargetsHit = false
+        //Deletes Hit target when necesery
+        //When there are no hit targets left: TargetsHit = false
         EvaluateTargets(levelElements);
     }
 
     if(currentMissile!=NULL){
-        /*Collisionberekeningen worden enkel gedaan indien:
-            -Er een missile bestaat
-            -Deze zich rechts van de x 550 bevind en dus kan botsen met het level
+        /*Collisioncalculations only happen when:
+            -A missile (in flight) exist
+            -this missile exist in the right side of the game
         */
         PositionComponent* mpc= dynamic_cast<PositionComponent*>(currentMissile->GetComponent(Component::POSITION));
+        CurrentMissileComponent* cmc= dynamic_cast<CurrentMissileComponent*>(currentMissile->GetComponent(Component::CURRENTMISSILE));
+
         if(mpc->position.x_>550){
 
             std::vector<Point> missilePoly;
             std::vector<Point> boxPoly;
+
+            //missile Hitbox varies
             if(currentMissile->GetComponent(Component::MISSILE1)!=NULL){
                 missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_+MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_)};
             }
@@ -43,8 +47,34 @@ void TargetSystem::Update() {
                     lec->IsHit = true;
                     engine_->GetContext().TargetsHit = true;
                     engine_->GetContext().LoadNextMissile = true;
+                    
+                    ////Logic for "hitting" more targets behind the collisiontarget
+                    ////this is easily done by using the levelmatrix in the context, the position of the collisiontarget in this matrix (see levelelement component)
+                    ////and the IsHit flag stored in the same component
+
+                    //conditions are in the horizontal case:
+                    //The collision is horizontal,  The horizonal speed is high enough,  The extra target is in bounds, The extra taget exists
+
+                    //horizontal
+                    std::cout << mpc->position.y_ << " " << bpc->position.y_ << " " << cmc->xVelocity << "   " << MISSILE_DST_HEIGHT/2 << std::endl;
+                    if(abs(mpc->position.y_-bpc->position.y_)<MISSILE_DST_HEIGHT/2 && cmc->xVelocity > 1000 && lec->matrixPosition.x_ <= 6 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_+1][lec->matrixPosition.y_] != NULL){
+                        std::cout << "fast horizontal collision happend and is possible" << std::endl;
+                        dynamic_cast<LevelElementComponent*>(engine_->GetContext().levelmatrix_[lec->matrixPosition.x_+1][lec->matrixPosition.y_]->GetComponent(Component::LEVELELEMENT))->IsHit = true;
+                        if(cmc->xVelocity >= 1400 && lec->matrixPosition.x_<=5 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_+ 2][lec->matrixPosition.y_]){
+                            dynamic_cast<LevelElementComponent*>(engine_->GetContext().levelmatrix_[lec->matrixPosition.x_+2][lec->matrixPosition.y_]->GetComponent(Component::LEVELELEMENT))->IsHit = true;
+                        }
+                    }
+                    //vertical
+                    if(abs(mpc->position.x_-bpc->position.x_)<MISSILE_DST_WIDTH/2 && cmc->yVelocity < -1000 && lec->matrixPosition.y_ >= 1 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_-1] != NULL){
+                        std::cout << "fast vertical collision happend and is possible" << std::endl;
+                        dynamic_cast<LevelElementComponent*>(engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_-1]->GetComponent(Component::LEVELELEMENT))->IsHit = true;
+                        if(lec->matrixPosition.y_ >= 2 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_-2] != NULL){
+                            dynamic_cast<LevelElementComponent*>(engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_-2]->GetComponent(Component::LEVELELEMENT))->IsHit = true;                    
+                        }
+                    }
                 }
             }
+            //explosion effect for missile1
             if(engine_->GetContext().TargetsHit){
                 engine_->RemoveEntity(currentMissile);
                 if(currentMissile->HasComponent(Component::MISSILE1)){
@@ -135,7 +165,6 @@ double TargetSystem::DistanceBetweenPolys(double min_dotp_poly_one, double max_d
 }
 
 void TargetSystem::EvaluateTargets(std::set<Entity*> levelElements){
-    std::cout<<"Evaluating target" << std::endl;
     int c = 0;
     for(Entity* levelElement:levelElements){
         LevelElementComponent* lec = dynamic_cast<LevelElementComponent*>(levelElement->GetComponent(Component::LEVELELEMENT));
@@ -144,8 +173,7 @@ void TargetSystem::EvaluateTargets(std::set<Entity*> levelElements){
             if(lec->HitCounter >= HITDURATION && (levelElement->HasComponent(Component::BOX) || levelElement->HasComponent(Component::TARGET))){
                 if (levelElement->HasComponent(Component::TARGET)){
                     engine_->GetContext().targetcounter-=1;//nieuw per geraakte target targetcounter -1
-                    std::cout<<"aantal targets over:"<<" "<<engine_->GetContext().targetcounter<<std::endl;// enkel voor debuggen
-                     
+                    std::cout<<"aantal targets over:"<<" "<<engine_->GetContext().targetcounter<<std::endl;// enkel voor debuggen    
                 }
                 engine_->RemoveEntity(levelElement);
                 engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_] = NULL;

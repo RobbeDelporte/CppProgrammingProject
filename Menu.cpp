@@ -4,6 +4,12 @@
 
 Menu::Menu(){
     ak_ = &Allkit::Get();
+
+    //////GENERALIZATION OF MENU
+    //A new menu consist of a vector with the menubuttons stored in the menu class
+    //A function implements a way to select the buttons (this varies with te relative position of the buttons)
+    // and some code that runs when a button is selected
+    // UpdateMenu() takes as argument the button vector and draws the menu, only gets called after an update happens
     
     //Add buttons to respective ButtonVector
     MainMenuButtons.push_back(Button("START",Point(450,100)));
@@ -19,30 +25,34 @@ Menu::Menu(){
 void Menu::Run()
 {
     exit_ = false;
+    UpdateMenu(MainMenuButtons);
     
     // Main Menu loop
     while (!exit_) {
         ak_->NextEvent();
         if(ak_->IsArrowKeyUpPushed()){
             selectedButton == 0? selectedButton=MainMenuButtons.size()-1: selectedButton-=1;
+            UpdateMenu(MainMenuButtons);
         }
         else if(ak_->IsArrowKeyDownPushed()){
             selectedButton == MainMenuButtons.size() - 1 ? selectedButton=0: selectedButton+=1;
+            UpdateMenu(MainMenuButtons);
         }
         else if(ak_->IsEnterKeyPushed()){
             if(selectedButton==0){
                 LevelSelect();
             }
-            /* replay   to do
             else if(selectedButton==1){
-
-            }*/
+                Context context;
+                context.level = "./assets/levels/levelTest.txt";
+                context.replay = true;
+                StartGame(context);
+            }
             else if(selectedButton==2){
                 exit_ = true;
             }
+            UpdateMenu(MainMenuButtons);
         }
-
-        UpdateMenu(MainMenuButtons);
         
         if (ak_->IsWindowClosed()) {
             exit_ = true;
@@ -64,15 +74,18 @@ void Menu::StartGame(Context& context)
 void Menu::LevelSelect(){
     exit_ = false;
     selectedButton = 0;
+    UpdateMenu(LevelSelectButtons);
     
     // Level Menu loop
     while (!exit_) {
         ak_->NextEvent();
         if(ak_->IsArrowKeyUpPushed()){
             selectedButton == 0? selectedButton=LevelSelectButtons.size()-1: selectedButton-=1;
+            UpdateMenu(LevelSelectButtons);
         }
         else if(ak_->IsArrowKeyDownPushed()){
             selectedButton == LevelSelectButtons.size() - 1 ? selectedButton=0: selectedButton+=1;
+            UpdateMenu(LevelSelectButtons);
         }
         else if(ak_->IsEnterKeyPushed()){
             if(selectedButton==0){
@@ -87,15 +100,14 @@ void Menu::LevelSelect(){
             }
             else if(selectedButton==2){
                 Context context;
-                context.level = "./assets/levels/level3.txt";
+                context.level = "./assets/levels/levelTest.txt";
                 StartGame(context);
             }
             else if(selectedButton==3){
                 exit_ = true;
             }
+            UpdateMenu(LevelSelectButtons);
         }
-
-        UpdateMenu(LevelSelectButtons);
         
         if (ak_->IsWindowClosed()) {
             exit_ = true;

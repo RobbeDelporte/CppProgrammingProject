@@ -2,18 +2,25 @@
 
 bool Game::Run() {
 
+    //some initializations
     exit_ = false;
     SetupSystems();
     LoadLevel();
     InitMissileQueue();
-
-
+    ak_->LoadLaunchSound();
     ak_->StartTimer();
+
+    if(engine_.GetContext().replay){
+        ReadHighscoreFile();
+    }
+
+    //////MAIN GAME LOOP
     while (!exit_)
     {
         ak_->NextEvent();
 
-
+        //The eventqueue gets read out as fast as possible
+        //When the update us called, the most recent mouse and keyinput get passed on via the context
         if(ak_->IsSpaceBarPushed()){
             engine_.keyInput = Engine::KEY_SPACE;
         }
@@ -27,7 +34,7 @@ bool Game::Run() {
             engine_.mouseinput = ak_->GetMouse();
         }
 
-
+        //the update is called when the event is a timerevent
         if(ak_->IsTimerEvent()){
             engine_.Update();
             engine_.keyInput = Engine::KEY_NONE;
@@ -37,21 +44,54 @@ bool Game::Run() {
             ak_->StopTimer();
             exit_ = true;
         }    
-            
+        //Was used for debugging so the game could quickly be restarted
         if(ak_->IsArrowKeyDownPushed()){
             ak_->StopTimer();
             exit_= true;
         }
+
         if (engine_.GetContext().targetcounter==0){
+            engine_.Update();
             ak_->StopTimer();
-            exit_=true;
+            EndGame();
         }
         
     }
     
-
-
     return true;
+}
+
+void Game::EndGame(){
+    if(not(engine_.GetContext().replay)){
+        std::ofstream outfile;
+        outfile.open("./assets/highscores/highscore1.txt");
+        for(std::vector<std::string>::iterator it = engine_.GetContext().missiles.begin();it!=engine_.GetContext().missiles.end();++it){
+            outfile << (*it) << std::endl;
+        }
+        outfile.close();
+    }
+
+    Point p(SCREEN_WIDTH/2,SCREEN_HEIGHT/2-30);
+    Color c(10,10,10);
+    std::string s("<PRESS ENTER>");
+    ak_->DrawString(s,p,c,Allkit::ALIGN_CENTER,true);
+    ak_->DrawOnScreen();
+    exit_ = false;
+    while(!exit_){
+        ak_->NextEvent();
+        if(ak_->IsEnterKeyPushed() || ak_->IsWindowClosed()){
+            exit_ = true;
+        }
+    }
+}
+
+void Game::ReadHighscoreFile(){
+    std::ifstream infile;
+    infile.open("./assets/highscores/highscore1.txt");
+    std::string c;
+    while(infile >> c){
+        engine_.GetContext().missiles.push_back(c);
+    }
 }
 
 void Game::SetupSystems(){
@@ -128,7 +168,7 @@ void Game::LoadLevel(){
 
 void Game::InitMissileQueue(){
     Entity* me = new Entity;
-    me->Add(new PositionComponent(Point(140,230)));
+    me->Add(new PositionComponent(Point(140,220)));
     me->Add(new Missile1Component());
     me->Add(new MissileQueueComponent(0));
     engine_.AddEntity(me);

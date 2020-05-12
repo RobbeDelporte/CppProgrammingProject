@@ -114,6 +114,10 @@ void RenderSystem::Update(){
         Render_elastic_not_attached();
     }
 
+    Point p(10,10);
+    Color c(10,10,10);
+    ak_->DrawString(std::string("Time: ") += (std::to_string(engine_->GetContext().timer/60)),p,c,Allkit::ALIGN_LEFT,true);
+
     ak_->DrawOnScreen();
 }
 
@@ -184,19 +188,19 @@ bool RenderSystem::RenderExplosion(ExplosionEffectComponent* eec){
     return false;
 }
 void RenderSystem::Render_elastic_not_attached(void){
-    Point a = Point(121, 233);  //a= punt vast aan linkertak vanboven 
+    Point a = Point(116, 220);  //a= punt vast aan linkertak vanboven 
     Point b = Point(125,257);  //b = knoop vast aan linkertak vanonder
-    Point c = Point(199,257); //c= punt vast aan rechtertak vanboven
-    Point d = Point(196,263); //d=punt vast aan rechtertak vanonder
+    Point c = Point(199,250); //c= punt vast aan rechtertak vanboven
+    Point d = Point(196,270); //d=punt vast aan rechtertak vanonder
 
     ak_->DrawLine(a,c); //we verbinden de bovenste twee punten
     ak_->DrawLine(b,d); //verbinde de onderste twee punten
 }
 void RenderSystem::Render_elastic_attached(PositionComponent* pc){
-    Point a = Point(121, 233);  //a= punt vast aan linkertak vanboven 
+    Point a = Point(116, 220);  //a= punt vast aan linkertak vanboven 
     Point b = Point(125,257);  //b = knoop vast aan linkertak vanonder
-    Point c = Point(199,257); //c= punt vast aan rechtertak vanboven
-    Point d = Point(196,263); //d=punt vast aan rechtertak vanonder
+    Point c = Point(199,250); //c= punt vast aan rechtertak vanboven
+    Point d = Point(196,270); //d=punt vast aan rechtertak vanonder
     int xco = pc->position.x_+MISSILE_DST_WIDTH/2 ;
     int yco_boven = SCREEN_HEIGHT-pc->position.y_;
     int yco_beneden = SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT;
