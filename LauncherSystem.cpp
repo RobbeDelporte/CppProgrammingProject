@@ -80,22 +80,31 @@ void LauncherSystem::Update(){
 }
 Point LauncherSystem::ConvertMouse(Point p){
     //Mouseinput naar standaard coord + spriteoffset
-    return Point(p.x_-(MISSILE_DST_HEIGHT/2),SCREEN_HEIGHT-p.y_+(MISSILE_DST_HEIGHT/2));
+    return Point(p.x_-(MISSILE_DST_HEIGHT/2),SCREEN_HEIGHT-(p.y_-(MISSILE_DST_HEIGHT/2)));
 }
 
 bool LauncherSystem::MissileSelected(Entity* entity,Point mouseInput,Engine::KEY_PRESSED keyInput){
     PositionComponent* pc= dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
-    //Cirkel hitbox
+    //Cirkel hitbox, checking if there is a mouseclick the hitbox of missile 1
     if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE1)){
         return true;
     }
-    else if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE2)){
-        return true;
-        //TODO Fix hitbox
+    //square hitbox, checking if there is a mouseclick the hitbox of missile 2
+    else if(abs((ConvertMouse(mouseInput)).x_-(pc->position).x_)<=(MISSILE_DST_WIDTH/2) && abs((ConvertMouse(mouseInput)).y_-(pc->position).y_)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE2)){
+        return true; 
+        
     }
-    else if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE3)){
+    //triangle hitbox,  checking if there is a mouseclick the hitbox of missile 3
+    // inspiration of the triangle hitbox:https://services.math.duke.edu/education/webfeatsII/gdrive/Team%20D/project/brokenstick.htm
+    
+   //the next array contains three distances from the position of the mouse to the vertices of the big triangle
+    double array_distances[3] ={(Point(mouseInput.x_, SCREEN_HEIGHT-mouseInput.y_))*(Point((pc->position).x_-MISSILE_DST_WIDTH/2,(pc->position).y_)), (Point(mouseInput.x_, SCREEN_HEIGHT-mouseInput.y_))*(Point((pc->position).x_+3*MISSILE_DST_WIDTH/2,(pc->position).y_)), (Point(mouseInput.x_, SCREEN_HEIGHT-mouseInput.y_))*(Point((pc->position).x_+MISSILE_DST_WIDTH/2,(pc->position).y_-2*MISSILE_DST_HEIGHT))};
+    std::sort(array_distances, array_distances+3);  //sorts the 3 distances from lowest to highest
+
+    //the next 'if' checks two things: the condition described in the link above 
+    //and if there is a mouseclick in the square around the triangle 
+    if((array_distances[0]+array_distances[1])>array_distances[2] && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE3) &&abs((ConvertMouse(mouseInput)).x_-(pc->position).x_)<=(MISSILE_DST_WIDTH/2) && abs((ConvertMouse(mouseInput)).y_-(pc->position).y_)<=(MISSILE_DST_HEIGHT/2)){
         return true;
-        //TODO fix hitbox
     }
     else{
         return false;
