@@ -16,6 +16,5 @@ public:
     int animStage = 0;
 
     int animTiming = 0;
-
 };
 #endif

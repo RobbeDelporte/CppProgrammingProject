@@ -3,16 +3,20 @@
 bool Game::Run() {
 
     //some initializations
+    engine_.GetContext().replay = context_.replay;
+    engine_.GetContext().level = context_.level;
     exit_ = false;
     SetupSystems();
+
+    if(context_.replay){
+        ReadHighscoreFile();
+    }
+
     LoadLevel();
     InitMissileQueue();
     ak_->LoadLaunchSound();
     ak_->StartTimer();
 
-    if(engine_.GetContext().replay){
-        ReadHighscoreFile();
-    }
 
     //////MAIN GAME LOOP
     while (!exit_)
@@ -37,6 +41,7 @@ bool Game::Run() {
         //the update is called when the event is a timerevent
         if(ak_->IsTimerEvent()){
             engine_.Update();
+            engine_.GetContext().timer += 1;
             engine_.keyInput = Engine::KEY_NONE;
         }
 
@@ -62,15 +67,26 @@ bool Game::Run() {
 }
 
 void Game::EndGame(){
-    if(not(engine_.GetContext().replay)){
+    if(not(context_.replay)){
         std::ofstream outfile;
         outfile.open("./assets/highscores/highscore1.txt");
+        outfile << std::string("[LEVEL]") << std::endl;
+        outfile << engine_.GetContext().level << std::endl;
+        outfile << std::string("[SEED]") << std::endl;
+        outfile << std::to_string(engine_.GetContext().seed) << std::endl;
+        outfile << std::string("[MISSILES]") << std::endl;
         for(std::vector<std::string>::iterator it = engine_.GetContext().missiles.begin();it!=engine_.GetContext().missiles.end();++it){
             outfile << (*it) << std::endl;
         }
+        outfile << std::string("[ACTIONS]") << std::endl;
+        for(std::vector<std::string>::iterator it = engine_.GetContext().actions.begin();it!=engine_.GetContext().actions.end();++it){
+            outfile << (*it) << std::endl;
+        }
+        outfile << std::to_string(engine_.GetContext().timer / 60) << std::endl;
         outfile.close();
     }
 
+    //PRESS ENTER to continue code
     Point p(SCREEN_WIDTH/2,SCREEN_HEIGHT/2-30);
     Color c(10,10,10);
     std::string s("<PRESS ENTER>");
@@ -88,10 +104,42 @@ void Game::EndGame(){
 void Game::ReadHighscoreFile(){
     std::ifstream infile;
     infile.open("./assets/highscores/highscore1.txt");
-    std::string c;
-    while(infile >> c){
-        engine_.GetContext().missiles.push_back(c);
+    enum reading{
+        none,
+        missiles,
+        actions
     }
+    reading = none;
+    for(std::string line; getline(infile,line);){
+        if(line == std::string("[MISSILES]")){
+            reading = missiles;
+        }
+        else if(line == std::string("[ACTIONS]")){
+            reading = actions;
+        }
+        else if(line == std::string("[LEVEL]")){
+            getline(infile,line);
+            engine_.GetContext().level = line;
+        }
+        else if(line == std::string("[SEED]")){
+            getline(infile,line);
+            std::stringstream ss;
+            ss << line;
+            int s;
+            ss >> s;
+            engine_.GetContext().seed = s;
+        }
+        else{
+            switch(reading){
+            case missiles:
+                engine_.GetContext().missiles.push_back(line);
+                break;
+            case actions:
+                engine_.GetContext().actions.push_back(line);
+            }
+        }
+    }
+    infile.close();
 }
 
 void Game::SetupSystems(){
@@ -124,9 +172,9 @@ void Game::LoadLevel(){
     engine_.AddEntity(entity);
 
     std::ifstream inFile;
-    inFile.open(context_.level);
+    inFile.open(engine_.GetContext().level);
     if(!inFile){
-        std::cerr << "Unable to open file: "<<context_.level<<std::endl;
+        std::cerr << "Unable to open file: "<<engine_.GetContext().level<<std::endl;
         exit(1); 
     }
     char c;
@@ -167,6 +215,14 @@ void Game::LoadLevel(){
 }
 
 void Game::InitMissileQueue(){
+    if(engine_.GetContext().replay){
+        srand(engine_.GetContext().seed);
+    }
+    else{
+        int r = rand()%1000;
+        engine_.GetContext().seed = r;
+        srand(r);
+    }
     Entity* me = new Entity;
     me->Add(new PositionComponent(Point(140,220)));
     me->Add(new Missile1Component());

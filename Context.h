@@ -26,7 +26,10 @@ public:
     int timer = 0;
 
     /////Replay information
+    std::string replayFile;
     std::vector<std::string> missiles;
+    std::vector<std::string> actions;
+    int seed;
 
     bool replay = false;
     int inputPointer = 0;

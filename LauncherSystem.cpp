@@ -1,6 +1,7 @@
 #include "LauncherSystem.h"
 
 #include <iostream>
+#include <sstream>
 
 
 void LauncherSystem::Update(){
@@ -23,15 +24,56 @@ void LauncherSystem::Update(){
         if(mqc->queuenumber==0){
             Component* component = entity->GetComponent(Component::POSITION);
             PositionComponent* pc= dynamic_cast<PositionComponent*>(component);
-            if(MissileSelected(entity,mouseInput,keyInput)){
-                mqc->selected = true;
+            if(engine_->GetContext().replay == false){
+
+                engine_->GetContext().missiles.push_back(std::to_string(mouseInput.x_) += std::string(" ") += std::to_string(mouseInput.y_));
+                if(MissileSelected(entity,mouseInput,keyInput)){
+                    engine_->GetContext().missiles.push_back(std::string("START"));
+                    mqc->selected = true;
+                }
+                else if(mqc->selected == true && keyInput == Engine::KEY_MOUSE_UP){
+                    mqc->selected = false;
+                    engine_->GetContext().missiles.push_back(std::string("END"));
+                    engine_->GetContext().missiles.push_back(std::to_string(mouseInput.x_) += std::string(" ") += std::to_string(mouseInput.y_));
+                    LaunchMissile(entity,mqc,mouseInput);
+                }
+                else if(mqc->selected == true){
+                    pc->position = (ConvertMouse(mouseInput)+Point(120,230))/2;           
+                }
             }
-            else if(mqc->selected == true && keyInput == Engine::KEY_MOUSE_UP){
-                LaunchMissile(entity,mqc,mouseInput);
-                mqc->selected = false;
-            }
-            else if(mqc->selected == true){
-                pc->position = (ConvertMouse(mouseInput)+Point(120,230))/2;           
+            
+            else{
+                std::string s = engine_->GetContext().missiles[0];
+                engine_->GetContext().missiles.erase(engine_->GetContext().missiles.begin());
+                if(s == std::string("START")){
+                    mqc->selected = true;
+                }
+                else if(s == std::string("END")){
+                    std::string s = engine_->GetContext().missiles[0];
+                    engine_->GetContext().missiles.erase(engine_->GetContext().missiles.begin());
+                    mqc->selected = false;
+                    std::stringstream ss;;
+                    ss << s;
+                    float x;
+                    float y;
+                    ss >> x;
+                    ss >> y;
+                    mouseInput.x_ = x;
+                    mouseInput.y_ = y;
+                    LaunchMissile(entity,mqc,mouseInput);
+                }
+                else if(mqc->selected == true){
+                    std::stringstream ss;;
+                    ss << s;
+                    float x;
+                    float y;
+                    ss >> x;
+                    ss >> y;
+                    mouseInput.x_ = x;
+                    mouseInput.y_ = y;
+                    std::cout << x << " " << y << std::endl;
+                    pc->position = (ConvertMouse(mouseInput)+Point(120,230))/2;
+                }
             }
         }
     }

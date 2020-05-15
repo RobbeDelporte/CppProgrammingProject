@@ -12,7 +12,7 @@
 
 #include <fstream>
 #include <iostream>
-
+#include <sstream>
 
 class Game
 {
