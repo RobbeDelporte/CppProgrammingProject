@@ -1,7 +1,7 @@
 #include "Game.h"
 
 bool Game::Run() {
-
+    
     //some initializations
     engine_.GetContext().replay = context_.replay;
     engine_.GetContext().level = context_.level;
@@ -27,7 +27,7 @@ bool Game::Run() {
         ak_->NextEvent();
 
         //The eventqueue gets read out as fast as possible
-        //When the update us called, the most recent mouse and keyinput get passed on via the context
+        //When the update is called, the most recent mouse and keyinput get passed on via the context
         if(ak_->IsSpaceBarPushed()){
             engine_.keyInput = Engine::KEY_SPACE;
         }
@@ -256,8 +256,8 @@ void Game::LoadLevel(){
         else if(c == 'T'){
             entity->Add(new TargetComponent());
             engine_.AddEntity(entity);
-            engine_.GetContext().targetcounter+=1; //nieuw, telt alle targets, per verwijderde (dus voldoende geraakt) target gaat er weer 1 af            
-        }                               // totdat targetconuter==0 , dan weer quit
+            engine_.GetContext().targetcounter+=1; //counts all targets in a level          
+        }                               
         else{
             entity = NULL;
         }
