@@ -1,4 +1,5 @@
 #include "MissileSystem.h"
+#include <sstream>
 
 void MissileSystem::Update(){
     EntityStream es = engine_->GetEntityStream();
@@ -7,8 +8,23 @@ void MissileSystem::Update(){
         CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
         PositionComponent* pc= dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
         UpdateSpeed(cmc);
-        if(engine_->keyInput == Engine::KEY_SPACE && cmc->SpecialActivated == false){
-            ActivateSpecial(entity);
+        if(engine_->GetContext().replay == false){
+            if(engine_->keyInput == Engine::KEY_SPACE && cmc->SpecialActivated == false){
+                engine_->GetContext().actions.push_back(std::to_string(pc->position.x_) += std::string(" ") += std::to_string(pc->position.y_));
+                ActivateSpecial(entity);
+            }
+        }
+        else if(engine_->GetContext().actions.size() > 0){
+            std::stringstream ss;
+            ss << engine_->GetContext().actions[0];
+            double x;
+            double y;
+            ss >> x;
+            ss >> y;
+            if((pc->position * Point(x,y)) <= 0.1){
+                engine_->GetContext().actions.erase(engine_->GetContext().actions.begin());
+                ActivateSpecial(entity);
+            }
         }
         pc->position = UpdatePosition(cmc,pc->position,entity);
     }

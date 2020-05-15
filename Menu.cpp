@@ -44,7 +44,6 @@ void Menu::Run()
             }
             else if(selectedButton==1){
                 Context context;
-                context.level = "./assets/levels/levelTest.txt";
                 context.replay = true;
                 StartGame(context);
             }
