@@ -20,7 +20,7 @@ public:
     //Gets set to true when levelements get removed, leads to a levelUpdate in the LevelSystem
     bool NeedLevelUpdate = false;
     
-    int targetcounter;   // dit is om te weten wanneer het spel is afgelopen, komt hij op 0 dan is het level gedaan
+    int targetcounter;   // number of targets that aren't hit yet, when 0 the level is over
 
     //basic timer, inceases by 1 every update
     int timer = 0;

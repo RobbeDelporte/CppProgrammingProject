@@ -1,9 +1,9 @@
 #include "Engine.h"
 
-
 void Engine::AddEntity(Entity* entity) {
     UpdateEntity(entity,entity->GetTags(),false);
     entities.push_back(entity);
+     
 }
 
 void Engine::UpdateEntity(Entity* entity, std::vector<Component::Tag>& tags, bool remove) {
