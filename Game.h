@@ -35,7 +35,7 @@ public:
 
     void EndGame();
 
-    void ReadHighscoreFile();
+    bool ReadHighscoreFile();
 
     void SetupSystems();
 

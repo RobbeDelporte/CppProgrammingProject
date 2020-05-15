@@ -20,6 +20,11 @@ Menu::Menu(){
     LevelSelectButtons.push_back(Button("LEVEL 2",Point(450,200)));
     LevelSelectButtons.push_back(Button("LEVEL 3",Point(450,300)));
     LevelSelectButtons.push_back(Button("RETURN",Point(450,400)));
+
+    ReplaySelectButtons.push_back(Button("HIGHSCORE 1",Point(450,100)));
+    ReplaySelectButtons.push_back(Button("HIGHSCORE 2",Point(450,200)));
+    ReplaySelectButtons.push_back(Button("HIGHSCORE 3",Point(450,300)));
+    ReplaySelectButtons.push_back(Button("RETURN",Point(450,400)));
 }
 
 void Menu::Run()
@@ -43,9 +48,7 @@ void Menu::Run()
                 LevelSelect();
             }
             else if(selectedButton==1){
-                Context context;
-                context.replay = true;
-                StartGame(context);
+                ReplaySelect();
             }
             else if(selectedButton==2){
                 exit_ = true;
@@ -61,7 +64,7 @@ void Menu::Run()
 
 void Menu::StartGame(Context& context) 
 {
-    std::cout << "StartButton Selected" << std::endl;
+    std::cout << "game starting" << std::endl;
 
 
     Game game(context);
@@ -99,13 +102,63 @@ void Menu::LevelSelect(){
             }
             else if(selectedButton==2){
                 Context context;
-                context.level = "./assets/levels/levelTest.txt";
+                context.level = "./assets/levels/level3.txt";
                 StartGame(context);
             }
             else if(selectedButton==3){
                 exit_ = true;
             }
             UpdateMenu(LevelSelectButtons);
+        }
+        
+        if (ak_->IsWindowClosed()) {
+            exit_ = true;
+        }
+    }
+
+    exit_ = false;
+    selectedButton = 0;
+}
+
+void Menu::ReplaySelect(){
+    exit_ = false;
+    selectedButton = 0;
+    UpdateMenu(ReplaySelectButtons);
+    
+    // Level Menu loop
+    while (!exit_) {
+        ak_->NextEvent();
+        if(ak_->IsArrowKeyUpPushed()){
+            selectedButton == 0? selectedButton=ReplaySelectButtons.size()-1: selectedButton-=1;
+            UpdateMenu(ReplaySelectButtons);
+        }
+        else if(ak_->IsArrowKeyDownPushed()){
+            selectedButton == ReplaySelectButtons.size() - 1 ? selectedButton=0: selectedButton+=1;
+            UpdateMenu(ReplaySelectButtons);
+        }
+        else if(ak_->IsEnterKeyPushed()){
+            if(selectedButton==0){
+                Context context;
+                context.replay = true;
+                context.replayFile = "./assets/highscores/highscore_1.txt";
+                StartGame(context);
+            }
+            else if(selectedButton==1){
+                Context context;
+                context.replay = true;
+                context.replayFile = "./assets/highscores/highscore_2.txt";
+                StartGame(context);
+            }
+            else if(selectedButton==2){
+                Context context;
+                context.replay = true;
+                context.replayFile = "./assets/highscores/highscore_3.txt";
+                StartGame(context);
+            }
+            else if(selectedButton==3){
+                exit_ = true;
+            }
+            UpdateMenu(ReplaySelectButtons);
         }
         
         if (ak_->IsWindowClosed()) {

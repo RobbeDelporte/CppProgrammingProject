@@ -25,8 +25,6 @@ class LauncherSystem : public System {
 
         Point ConvertMouse(Point);
 
-        Point ConvertPoint(Point);
-
         void LaunchMissile(Entity*,MissileQueueComponent*,Point);
 
         void UpdateQueue(std::set<Entity*>);

@@ -72,9 +72,9 @@ void RenderSystem::Update(){
         std::set<Component::Tag> tags = {Component::BOX,Component::STONE,Component::TARGET};
         entities = es.WithTagsOR(tags);
         for(Entity* entity:entities){
-            PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
-            std::vector<Point> poly = {Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_),Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_)};
-            ak_->DrawPoly(poly);
+            PositionComponent* bpc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
+                std::vector<Point> boxPoly = {Point(bpc->position.x_+1,SCREEN_HEIGHT-(bpc->position.y_-1)),Point(bpc->position.x_+1,SCREEN_HEIGHT-(bpc->position.y_-MISSILE_DST_HEIGHT+1)),Point(bpc->position.x_+MISSILE_DST_WIDTH-1,SCREEN_HEIGHT-(bpc->position.y_-MISSILE_DST_HEIGHT+1)),Point(bpc->position.x_+MISSILE_DST_WIDTH-1,SCREEN_HEIGHT-(bpc->position.y_-1))};
+            ak_->DrawPoly(boxPoly);
         }
 
         entities = es.WithTag(Component::MISSILE1);
@@ -87,7 +87,7 @@ void RenderSystem::Update(){
         entities = es.WithTag(Component::MISSILE2);
         for(Entity* entity:entities){
             PositionComponent* pc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
-            std::vector<Point> poly = {Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_+6),Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_-4+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_-4+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_+6)};
+            std::vector<Point> poly = {Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_+8),Point(pc->position.x_,SCREEN_HEIGHT-pc->position.y_-4+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_-4+MISSILE_DST_HEIGHT),Point(pc->position.x_+MISSILE_DST_WIDTH,SCREEN_HEIGHT-pc->position.y_+8)};
             ak_->DrawPoly(poly);
         }
 
