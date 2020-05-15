@@ -1,6 +1,5 @@
 #include "Engine.h"
 
-#include <iostream>
 void Engine::AddEntity(Entity* entity) {
     UpdateEntity(entity,entity->GetTags(),false);
     entities.push_back(entity);
