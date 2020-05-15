@@ -24,6 +24,7 @@ void LauncherSystem::Update(){
         if(mqc->queuenumber==0){
             Component* component = entity->GetComponent(Component::POSITION);
             PositionComponent* pc= dynamic_cast<PositionComponent*>(component);
+            //NON REPLAY CASE
             if(engine_->GetContext().replay == false){
 
                 engine_->GetContext().missiles.push_back(std::to_string(mouseInput.x_) += std::string(" ") += std::to_string(mouseInput.y_));
@@ -41,7 +42,7 @@ void LauncherSystem::Update(){
                     pc->position = (ConvertMouse(mouseInput)+Point(120,230))/2;           
                 }
             }
-            
+            //REPLAY CASE
             else{
                 std::string s = engine_->GetContext().missiles[0];
                 engine_->GetContext().missiles.erase(engine_->GetContext().missiles.begin());
@@ -54,8 +55,8 @@ void LauncherSystem::Update(){
                     mqc->selected = false;
                     std::stringstream ss;;
                     ss << s;
-                    float x;
-                    float y;
+                    double x;
+                    double y;
                     ss >> x;
                     ss >> y;
                     mouseInput.x_ = x;
@@ -65,13 +66,13 @@ void LauncherSystem::Update(){
                 else if(mqc->selected == true){
                     std::stringstream ss;;
                     ss << s;
-                    float x;
-                    float y;
+                    double x;
+                    double y;
                     ss >> x;
                     ss >> y;
                     mouseInput.x_ = x;
                     mouseInput.y_ = y;
-                    std::cout << x << " " << y << std::endl;
+                    //std::cout << x << " " << y << std::endl;
                     pc->position = (ConvertMouse(mouseInput)+Point(120,230))/2;
                 }
             }
@@ -103,7 +104,7 @@ bool LauncherSystem::MissileSelected(Entity* entity,Point mouseInput,Engine::KEY
 
     //the next 'if' checks two things: the condition described in the link above 
     //and if there is a mouseclick in the square around the triangle 
-    if((array_distances[0]+array_distances[1])>array_distances[2] && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE3) &&abs((ConvertMouse(mouseInput)).x_-(pc->position).x_)<=(MISSILE_DST_WIDTH/2) && abs((ConvertMouse(mouseInput)).y_-(pc->position).y_)<=(MISSILE_DST_HEIGHT/2)){
+    if((array_distances[0]+array_distances[1])>array_distances[2] && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE3) && abs((ConvertMouse(mouseInput)).x_-(pc->position).x_)<=(MISSILE_DST_WIDTH/2) && abs((ConvertMouse(mouseInput)).y_-(pc->position).y_)<=(MISSILE_DST_HEIGHT/2)){
         return true;
     }
     else{
@@ -117,7 +118,7 @@ void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Poi
     entity->Remove(mqc);
     
     double vx = std::min(LAUNCH_STRENGTH*(140 - ConvertMouse(mousepos).x_),1200.0);
-    double vy = std::min(LAUNCH_STRENGTH*(220 - ConvertMouse(mousepos).y_),1000.0);
+    double vy = std::min(LAUNCH_STRENGTH*(220 - ConvertMouse(mousepos).y_),1200.0);
     std::cout << vx <<"  "<< vy <<std::endl;
 
     entity->Add(new CurrentMissileComponent(vx,vy));

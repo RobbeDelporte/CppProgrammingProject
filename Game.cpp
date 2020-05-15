@@ -5,11 +5,14 @@ bool Game::Run() {
     //some initializations
     engine_.GetContext().replay = context_.replay;
     engine_.GetContext().level = context_.level;
+    engine_.GetContext().replayFile = context_.replayFile;
     exit_ = false;
     SetupSystems();
 
     if(context_.replay){
-        ReadHighscoreFile();
+        if(not(ReadHighscoreFile())){
+            return true;
+        }
     }
 
     LoadLevel();
@@ -67,28 +70,69 @@ bool Game::Run() {
 }
 
 void Game::EndGame(){
+    Color c(10,10,10);
+
     if(not(context_.replay)){
-        std::ofstream outfile;
-        outfile.open("./assets/highscores/highscore1.txt");
-        outfile << std::string("[LEVEL]") << std::endl;
-        outfile << engine_.GetContext().level << std::endl;
-        outfile << std::string("[SEED]") << std::endl;
-        outfile << std::to_string(engine_.GetContext().seed) << std::endl;
-        outfile << std::string("[MISSILES]") << std::endl;
-        for(std::vector<std::string>::iterator it = engine_.GetContext().missiles.begin();it!=engine_.GetContext().missiles.end();++it){
-            outfile << (*it) << std::endl;
+        //Get the highscore of the respective highscorefile
+        std::ifstream inFile;
+        if(engine_.GetContext().level == std::string("./assets/levels/level1.txt")){
+            inFile.open("./assets/highscores/highscore_1.txt");
         }
-        outfile << std::string("[ACTIONS]") << std::endl;
-        for(std::vector<std::string>::iterator it = engine_.GetContext().actions.begin();it!=engine_.GetContext().actions.end();++it){
-            outfile << (*it) << std::endl;
+        else if(engine_.GetContext().level == std::string("./assets/levels/level2.txt")){
+            inFile.open("./assets/highscores/highscore_2.txt");
         }
-        outfile << std::to_string(engine_.GetContext().timer / 60) << std::endl;
-        outfile.close();
+        else if(engine_.GetContext().level == std::string("./assets/levels/level3.txt")){
+            inFile.open("./assets/highscores/highscore_3.txt");
+        }
+        int highscore = 99999;
+        for(std::string line; getline(inFile,line);){
+            if(line == std::string("[SCORE]")){
+                getline(inFile,line);
+                std::stringstream ss;
+                ss << line;
+                int s;
+                ss >> s;
+                highscore = s;
+            }
+        }
+        inFile.close();
+
+        //If you got a beter score in the played game overwrite this highscore
+        if(engine_.GetContext().timer / 60 < highscore){
+            std::ofstream outFile;
+            if(engine_.GetContext().level == std::string("./assets/levels/level1.txt")){
+                outFile.open("./assets/highscores/highscore_1.txt");
+            }
+            else if(engine_.GetContext().level == std::string("./assets/levels/level2.txt")){
+                outFile.open("./assets/highscores/highscore_2.txt");
+            }
+            else if(engine_.GetContext().level == std::string("./assets/levels/level3.txt")){
+                outFile.open("./assets/highscores/highscore_3.txt");
+            }
+            outFile << "[LEVEL]" << std::endl;
+            outFile << engine_.GetContext().level << std::endl;
+            outFile << "[SEED]" << std::endl;
+            outFile << std::to_string(engine_.GetContext().seed) << std::endl;
+            outFile << "[MISSILES]" << std::endl;
+            for(std::vector<std::string>::iterator it = engine_.GetContext().missiles.begin();it!=engine_.GetContext().missiles.end();++it){
+                outFile << (*it) << std::endl;
+            }
+            outFile << "[ACTIONS]" << std::endl;
+            for(std::vector<std::string>::iterator it = engine_.GetContext().actions.begin();it!=engine_.GetContext().actions.end();++it){
+                outFile << (*it) << std::endl;
+            }
+            outFile << "[SCORE]"  << std::endl;
+            outFile << std::to_string(engine_.GetContext().timer / 60) << std::endl;
+            outFile.close();
+
+            Point hp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2+100);
+            std::string h("NEW HIGHSCORE");
+            ak_->DrawString(h,hp,c,Allkit::ALIGN_CENTER,true);
+        }
     }
 
     //PRESS ENTER to continue code
     Point p(SCREEN_WIDTH/2,SCREEN_HEIGHT/2-30);
-    Color c(10,10,10);
     std::string s("<PRESS ENTER>");
     ak_->DrawString(s,p,c,Allkit::ALIGN_CENTER,true);
     ak_->DrawOnScreen();
@@ -101,9 +145,15 @@ void Game::EndGame(){
     }
 }
 
-void Game::ReadHighscoreFile(){
+bool Game::ReadHighscoreFile(){
     std::ifstream infile;
-    infile.open("./assets/highscores/highscore1.txt");
+    infile.open(engine_.GetContext().replayFile);
+
+    if(!infile){
+        std::cerr << "Unable to open replayFile: "<<engine_.GetContext().replayFile<<std::endl;
+        return false;
+    }
+
     enum reading{
         none,
         missiles,
@@ -120,6 +170,10 @@ void Game::ReadHighscoreFile(){
         else if(line == std::string("[LEVEL]")){
             getline(infile,line);
             engine_.GetContext().level = line;
+        }
+        else if(line == std::string("[SCORE]")){
+            getline(infile,line);
+            //Do something with score
         }
         else if(line == std::string("[SEED]")){
             getline(infile,line);
@@ -140,6 +194,7 @@ void Game::ReadHighscoreFile(){
         }
     }
     infile.close();
+    return true;
 }
 
 void Game::SetupSystems(){
@@ -174,7 +229,7 @@ void Game::LoadLevel(){
     std::ifstream inFile;
     inFile.open(engine_.GetContext().level);
     if(!inFile){
-        std::cerr << "Unable to open file: "<<engine_.GetContext().level<<std::endl;
+        std::cerr << "Unable to open levelFile: "<<engine_.GetContext().level<<std::endl;
         exit(1); 
     }
     char c;

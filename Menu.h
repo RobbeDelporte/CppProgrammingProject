@@ -15,20 +15,24 @@ public:
     // Start the menu loop
     void Run();
 
+private:
+    Allkit* ak_ = NULL;
+    Sprite background = SPRT_MENU_BACKGROUND;
+    std::vector<Button> MainMenuButtons;
+    std::vector<Button> LevelSelectButtons;
+    std::vector<Button> ReplaySelectButtons;
+    unsigned int selectedButton = 0;
+    Color unselected = Color(10,10,10);
+    Color selected = Color(255,0,0);
+
     void StartGame(Context&);
 
     void UpdateMenu(std::vector<Button>);
 
     void LevelSelect();
 
-private:
-    Allkit* ak_ = NULL;
-    Sprite background = SPRT_MENU_BACKGROUND;
-    std::vector<Button> MainMenuButtons;
-    std::vector<Button> LevelSelectButtons;
-    unsigned int selectedButton = 0;
-    Color unselected = Color(10,10,10);
-    Color selected = Color(255,0,0);
+    void ReplaySelect();
+
 protected:
     bool exit_ = false;
 };

@@ -30,7 +30,7 @@ void TargetSystem::Update() {
                 missilePoly = {mpc->position,Point(mpc->position.x_,mpc->position.y_+MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_)};
             }
             else if(currentMissile->GetComponent(Component::MISSILE2)!=NULL){
-                missilePoly = {Point(mpc->position.x_,mpc->position.y_+6),Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT-4),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT-4),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_+6)};
+                missilePoly =  {Point(mpc->position.x_,mpc->position.y_-8),Point(mpc->position.x_,mpc->position.y_+4-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_+4-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-8)};
             }
             else if(currentMissile->GetComponent(Component::MISSILE3)!=NULL){
                 missilePoly = {Point(mpc->position.x_+MISSILE_DST_WIDTH/2,mpc->position.y_),Point(mpc->position.x_,mpc->position.y_-MISSILE_DST_HEIGHT),Point(mpc->position.x_+MISSILE_DST_WIDTH,mpc->position.y_-MISSILE_DST_HEIGHT)};
@@ -38,7 +38,7 @@ void TargetSystem::Update() {
 
             for(Entity* levelElement: levelElements){
                 PositionComponent* bpc = dynamic_cast<PositionComponent*>(levelElement->GetComponent(Component::POSITION));
-                boxPoly = {bpc->position,Point(bpc->position.x_,bpc->position.y_-MISSILE_DST_HEIGHT),Point(bpc->position.x_+MISSILE_DST_WIDTH,bpc->position.y_),Point(bpc->position.x_+MISSILE_DST_WIDTH,bpc->position.y_-MISSILE_DST_HEIGHT)};
+                boxPoly = {Point(bpc->position.x_+1,bpc->position.y_-1),Point(bpc->position.x_+1,bpc->position.y_-MISSILE_DST_HEIGHT+1),Point(bpc->position.x_+MISSILE_DST_WIDTH-1,bpc->position.y_-MISSILE_DST_HEIGHT+1),Point(bpc->position.x_+MISSILE_DST_WIDTH-1,bpc->position.y_-1)};
 
                 LevelElementComponent* lec = dynamic_cast<LevelElementComponent*>(levelElement->GetComponent(Component::LEVELELEMENT));
 
@@ -57,7 +57,7 @@ void TargetSystem::Update() {
 
                     //horizontal
                     std::cout << mpc->position.y_ << " " << bpc->position.y_ << " " << cmc->xVelocity << "   " << MISSILE_DST_HEIGHT/2 << std::endl;
-                    if(abs(mpc->position.y_-bpc->position.y_)<MISSILE_DST_HEIGHT/2 && cmc->xVelocity > 1000 && lec->matrixPosition.x_ <= 6 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_+1][lec->matrixPosition.y_] != NULL){
+                    if(abs(mpc->position.y_-bpc->position.y_)<MISSILE_DST_HEIGHT*(3/2) && cmc->xVelocity > 1000 && lec->matrixPosition.x_ <= 6 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_+1][lec->matrixPosition.y_] != NULL){
                         std::cout << "fast horizontal collision happend and is possible" << std::endl;
                         dynamic_cast<LevelElementComponent*>(engine_->GetContext().levelmatrix_[lec->matrixPosition.x_+1][lec->matrixPosition.y_]->GetComponent(Component::LEVELELEMENT))->IsHit = true;
                         if(cmc->xVelocity >= 1400 && lec->matrixPosition.x_<=5 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_+ 2][lec->matrixPosition.y_]){
@@ -65,7 +65,7 @@ void TargetSystem::Update() {
                         }
                     }
                     //vertical
-                    if(abs(mpc->position.x_-bpc->position.x_)<MISSILE_DST_WIDTH/2 && cmc->yVelocity < -1000 && lec->matrixPosition.y_ >= 1 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_-1] != NULL){
+                    if(abs(mpc->position.x_-bpc->position.x_)<MISSILE_DST_WIDTH*(3/2)&& cmc->yVelocity < -1000 && lec->matrixPosition.y_ >= 1 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_-1] != NULL){
                         std::cout << "fast vertical collision happend and is possible" << std::endl;
                         dynamic_cast<LevelElementComponent*>(engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_-1]->GetComponent(Component::LEVELELEMENT))->IsHit = true;
                         if(lec->matrixPosition.y_ >= 2 && engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_-2] != NULL){

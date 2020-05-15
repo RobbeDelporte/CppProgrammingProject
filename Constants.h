@@ -3,7 +3,7 @@
 
 #define FPS 60.0
 
-#define DEBUG_MODE true
+#define DEBUG_MODE false
 
 #define SCREEN_WIDTH 900
 #define SCREEN_HEIGHT 450
