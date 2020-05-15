@@ -125,7 +125,7 @@ void Game::EndGame(){
             outFile << std::to_string(engine_.GetContext().timer / 60) << std::endl;
             outFile.close();
 
-            Point hp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2+100);
+            Point hp(SCREEN_WIDTH/2, SCREEN_HEIGHT/2-100);
             std::string h("NEW HIGHSCORE");
             ak_->DrawString(h,hp,c,Allkit::ALIGN_CENTER,true);
         }
@@ -155,11 +155,10 @@ bool Game::ReadHighscoreFile(){
     }
 
     enum reading{
-        none,
         missiles,
         actions
     }
-    reading = none;
+    reading;
     for(std::string line; getline(infile,line);){
         if(line == std::string("[MISSILES]")){
             reading = missiles;
