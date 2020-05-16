@@ -7,7 +7,7 @@ void TargetSystem::Update() {
     std::set<Entity*> levelElements = es.WithTag(Component::LEVELELEMENT);
 
     if(engine_->GetContext().TargetsHit){
-        //Deletes Hit target when necesery
+        //Deletes Hit target when necessary
         //When there are no hit targets left: TargetsHit = false
         EvaluateTargets(levelElements);
     }
@@ -172,8 +172,8 @@ void TargetSystem::EvaluateTargets(std::set<Entity*> levelElements){
             lec->HitCounter += 1;
             if(lec->HitCounter >= HITDURATION && (levelElement->HasComponent(Component::BOX) || levelElement->HasComponent(Component::TARGET))){
                 if (levelElement->HasComponent(Component::TARGET)){
-                    engine_->GetContext().targetcounter-=1;//nieuw per geraakte target targetcounter -1
-                    std::cout<<"aantal targets over:"<<" "<<engine_->GetContext().targetcounter<<std::endl;// enkel voor debuggen    
+                    engine_->GetContext().targetcounter-=1;//decreases targetcounter by one per target who has been hit enough
+                    std::cout<<"aantal targets over:"<<" "<<engine_->GetContext().targetcounter<<std::endl;//prints the number of remaining targets in the terminal    
                 }
                 engine_->RemoveEntity(levelElement);
                 engine_->GetContext().levelmatrix_[lec->matrixPosition.x_][lec->matrixPosition.y_] = NULL;
