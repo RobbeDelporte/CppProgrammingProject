@@ -158,23 +158,30 @@ bool Game::ReadHighscoreFile(){
         missiles,
         actions
     }
+
     reading;
+    int detectedTags = 0;
     for(std::string line; getline(infile,line);){
         if(line == std::string("[MISSILES]")){
+            detectedTags += 1;
             reading = missiles;
         }
         else if(line == std::string("[ACTIONS]")){
+            detectedTags += 1;
             reading = actions;
         }
         else if(line == std::string("[LEVEL]")){
+            detectedTags += 1;
             getline(infile,line);
             engine_.GetContext().level = line;
         }
         else if(line == std::string("[SCORE]")){
+            detectedTags += 1;
             getline(infile,line);
             //Do something with score
         }
         else if(line == std::string("[SEED]")){
+            detectedTags += 1;
             getline(infile,line);
             std::stringstream ss;
             ss << line;
@@ -193,7 +200,14 @@ bool Game::ReadHighscoreFile(){
         }
     }
     infile.close();
-    return true;
+    //Check if all tags are present
+    if(detectedTags == 5){
+        return true;
+    }
+    else{
+        std::cout << "Incorrect file format: not all tags were detected" << std::endl;
+        return false;
+    }
 }
 
 void Game::SetupSystems(){
