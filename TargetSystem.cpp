@@ -191,7 +191,7 @@ void TargetSystem::EvaluateTargets(std::set<Entity*> levelElements){
         }
     }
     if(c == 0){
-        //Geen targets meer die geraakt zijn
+        //No more targets who are hit
         engine_->GetContext().TargetsHit = false;
     }
 }

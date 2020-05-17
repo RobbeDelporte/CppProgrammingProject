@@ -211,7 +211,7 @@ bool Game::ReadHighscoreFile(){
 }
 
 void Game::SetupSystems(){
-    
+    //adds the systems to the engine and gives a the engine as an attribute to the systems
     LauncherSystem* ls = new LauncherSystem();
     ls->SetEngine(&engine_);
     engine_.AddSystem(ls);
@@ -249,6 +249,8 @@ void Game::LoadLevel(){
     int i =0;
     int mx,my,rx,ry;
     engine_.GetContext().targetcounter=0;
+    //loading of the level, creating new levelelements as enities with the right components
+    //completes the levelmatrix
     while(inFile >> c){
         mx = i%8;
         my = 7 - floor(i/8);
@@ -278,11 +280,12 @@ void Game::LoadLevel(){
         engine_.GetContext().levelmatrix_[mx][my] = entity;
         i++;
     }
-    std::cout <<"aantaltargets"<<" "<<engine_.GetContext().targetcounter<< std::endl; //mag weg: gewoon voor debuggen
+    std::cout <<"aantaltargets"<<" "<<engine_.GetContext().targetcounter<< std::endl; //prints the remaining targets in the terminal
     inFile.close();
 }
 
 void Game::InitMissileQueue(){
+    //initialise the whole misselqueue
     if(engine_.GetContext().replay){
         srand(engine_.GetContext().seed);
     }
