@@ -1,6 +1,8 @@
 #include "LevelSystem.h"
 
 void LevelSystem::Update(){
+    //updates the level only when necessary
+    //makes sure that all the levelelements that were above a deleted target or box fall down
     if(engine_->GetContext().NeedLevelUpdate){
         std::vector<std::vector<Entity*>> levelmatrix = engine_->GetContext().levelmatrix_;
         for(int x = 0;x<8;x++){

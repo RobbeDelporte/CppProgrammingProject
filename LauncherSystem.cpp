@@ -19,20 +19,20 @@ void LauncherSystem::Update(){
 
     for(Entity* entity:entities){
 
-        Component* component = entity->GetComponent(Component::MISSILEQUEUE);
+        Component* component = entity->GetComponent(Component::MISSILEQUEUE); //selects all the entities who are missiles in the queue
         MissileQueueComponent* mqc = dynamic_cast<MissileQueueComponent*>(component);
-        if(mqc->queuenumber==0){
+        if(mqc->queuenumber==0){        //selects the missile who is curently in the launcher
             Component* component = entity->GetComponent(Component::POSITION);
             PositionComponent* pc= dynamic_cast<PositionComponent*>(component);
             //NON REPLAY CASE
             if(engine_->GetContext().replay == false){
 
-                engine_->GetContext().missiles.push_back(std::to_string(mouseInput.x_) += std::string(" ") += std::to_string(mouseInput.y_));
-                if(MissileSelected(entity,mouseInput,keyInput)){
+                engine_->GetContext().missiles.push_back(std::to_string(mouseInput.x_) += std::string(" ") += std::to_string(mouseInput.y_)); //puts the mousinput in the vector missile for replay purposes later on 
+                if(MissileSelected(entity,mouseInput,keyInput)){       //checking if the missile in the launcher is selected
                     engine_->GetContext().missiles.push_back(std::string("START"));
                     mqc->selected = true;
                 }
-                else if(mqc->selected == true && keyInput == Engine::KEY_MOUSE_UP){
+                else if(mqc->selected == true && keyInput == Engine::KEY_MOUSE_UP){ //checking if the missile was selected and now released so we can launch him
                     mqc->selected = false;
                     engine_->GetContext().missiles.push_back(std::string("END"));
                     engine_->GetContext().missiles.push_back(std::to_string(mouseInput.x_) += std::string(" ") += std::to_string(mouseInput.y_));
@@ -42,7 +42,8 @@ void LauncherSystem::Update(){
                     pc->position = (ConvertMouse(mouseInput)+Point(120,230))/2;           
                 }
             }
-            //REPLAY CASE
+            //REPLAY CASE, the same as the non replay case but,
+            //we read from a vector missiles as replacement for the mouseinput
             else{
                 if(engine_->GetContext().missiles.size() == 0){
                     std::cerr << "Replay failed: likely because of a desync between the replay and the original game. The highscorefile might be invalid" << std::endl;
@@ -90,11 +91,11 @@ Point LauncherSystem::ConvertMouse(Point p){
 
 bool LauncherSystem::MissileSelected(Entity* entity,Point mouseInput,Engine::KEY_PRESSED keyInput){
     PositionComponent* pc= dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
-    //Cirkel hitbox, checking if there is a mouseclick the hitbox of missile 1
+    //Cirkel hitbox, checking if there is a mouseclick in the hitbox of missile 1
     if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE1)){
         return true;
     }
-    //rectangle(no square) hitbox, checking if there is a mouseclick the hitbox of missile 2
+    //rectangle(no square) hitbox, checking if there is a mouseclick in the hitbox of missile 2
     else if(abs((ConvertMouse(mouseInput)).x_-(pc->position).x_)<=(MISSILE_DST_WIDTH/2) && (((0<=((ConvertMouse(mouseInput)).y_)-((pc->position).y_)) && (((ConvertMouse(mouseInput)).y_)-((pc->position).y_)<=MISSILE_DST_HEIGHT/2-8))||(((-MISSILE_DST_HEIGHT/2+4)<=((ConvertMouse(mouseInput).y_)-(pc->position).y_))&&(((ConvertMouse(mouseInput).y_)-(pc->position).y_)<=0))) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE2)){
         return true; 
         
@@ -111,6 +112,9 @@ bool LauncherSystem::MissileSelected(Entity* entity,Point mouseInput,Engine::KEY
 }
 
 void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Point mousepos){
+    //launches the missile and plays a sound when launched
+    //deletes the MissileQueueComponent and adds a CurrentMissileComponent to the entity
+    //it gives the entity also a given based on displacement of the elastic of the launcher
     ak_->PlayLaunchSound();
     engine_->RemoveEntity(entity);
     entity->Remove(mqc);
@@ -124,6 +128,8 @@ void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Poi
 }
 
 void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
+    //updates the queue when a missile was launched and then hit targets or went out of the boundaries
+    //adds a new missile entity to the queue
     engine_->GetContext().missileCounter += 1;
     for(Entity* entity:entities){
         MissileQueueComponent* mqc = dynamic_cast<MissileQueueComponent*>(entity->GetComponent(Component::MISSILEQUEUE));
