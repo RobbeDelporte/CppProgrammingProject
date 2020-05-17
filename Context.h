@@ -33,7 +33,6 @@ public:
     int seed;
 
     bool replay = false;
-    int inputPointer = 0;
 };
 
 #endif
