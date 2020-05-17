@@ -90,12 +90,12 @@ bool LauncherSystem::MissileSelected(Entity* entity,Point mouseInput,Engine::KEY
     if((ConvertMouse(mouseInput))*(pc->position)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE1)){
         return true;
     }
-    //square hitbox, checking if there is a mouseclick the hitbox of missile 2
-    else if(abs((ConvertMouse(mouseInput)).x_-(pc->position).x_)<=(MISSILE_DST_WIDTH/2) && abs((ConvertMouse(mouseInput)).y_-(pc->position).y_)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE2)){
+    //rectangle(no square) hitbox, checking if there is a mouseclick the hitbox of missile 2
+    else if(abs((ConvertMouse(mouseInput)).x_-(pc->position).x_)<=(MISSILE_DST_WIDTH/2) && (((0<=((ConvertMouse(mouseInput)).y_)-((pc->position).y_)) && (((ConvertMouse(mouseInput)).y_)-((pc->position).y_)<=MISSILE_DST_HEIGHT/2-8))||(((-MISSILE_DST_HEIGHT/2+4)<=((ConvertMouse(mouseInput).y_)-(pc->position).y_))&&(((ConvertMouse(mouseInput).y_)-(pc->position).y_)<=0))) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE2)){
         return true; 
         
     }
-    //triangle hitbox,  checking if there is a mouseclick the hitbox of missile 3
+    //triangle hitbox,  checking if there is a mouseclick in the hitbox of missile 3
     
 
     else if(abs((ConvertMouse(mouseInput)).x_-(pc->position).x_)<=abs((ConvertMouse(mouseInput)).y_-(pc->position).y_-MISSILE_DST_HEIGHT/2)/2 && abs((ConvertMouse(mouseInput)).y_-(pc->position).y_)<=(MISSILE_DST_HEIGHT/2) && keyInput == Engine::KEY_MOUSE_DOWN && entity->HasComponent(Component::MISSILE3) ){
