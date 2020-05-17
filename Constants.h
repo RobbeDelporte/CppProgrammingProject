@@ -25,11 +25,13 @@
 #define MISSILES 4
 #define LEVEL_SIZE 8
 
+//Fysics
 #define LAUNCH_STRENGTH 8
 #define GRAVITYCONSTANT 15
 #define FRICTION 50
 #define VELOCITYPRESCALER 100
 
+//Animation constants
 #define HITDURATION 15
 #define TARGETANIMTIMING 50
 #define MISSILE2ANIMTIMING 3
