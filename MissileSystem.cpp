@@ -11,7 +11,7 @@ void MissileSystem::Update(){
         //NON REPLAY CASE
         if(engine_->GetContext().replay == false){
             if(engine_->keyInput == Engine::KEY_SPACE && cmc->SpecialActivated == false){
-                engine_->GetContext().actions.push_back(std::to_string(pc->position.x_) += std::string(" ") += std::to_string(pc->position.y_));
+                engine_->GetContext().actions.push_back(std::to_string(engine_->GetContext().missileCounter) += std::string(" ") += std::to_string(pc->position.x_) += std::string(" ") += std::to_string(pc->position.y_));
                 ActivateSpecial(entity);
             }
         }
@@ -19,12 +19,14 @@ void MissileSystem::Update(){
         else if(engine_->GetContext().actions.size() > 0){
             std::stringstream ss;
             ss << engine_->GetContext().actions[0];
+            int missileCounter;
             double x;
             double y;
+            ss >> missileCounter;
             ss >> x;
             ss >> y;
             std::cout << "(" << pc->position.x_ << "," << pc->position.y_ << ") ("<< x << "," << y << ") " << (pc->position * Point(x,y)) << std::endl;
-            if((pc->position * Point(x,y)) <= 4){
+            if((pc->position * Point(x,y)) <= 4 && missileCounter == engine_->GetContext().missileCounter){
                 engine_->GetContext().actions.erase(engine_->GetContext().actions.begin());
                 ActivateSpecial(entity);
             }

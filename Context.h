@@ -33,6 +33,8 @@ public:
     int seed;
 
     bool replay = false;
+    int missileCounter = 0;
+
 };
 
 #endif

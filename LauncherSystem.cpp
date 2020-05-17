@@ -124,6 +124,7 @@ void LauncherSystem::LaunchMissile(Entity* entity,MissileQueueComponent* mqc,Poi
 }
 
 void LauncherSystem::UpdateQueue(std::set<Entity*> entities){
+    engine_->GetContext().missileCounter += 1;
     for(Entity* entity:entities){
         MissileQueueComponent* mqc = dynamic_cast<MissileQueueComponent*>(entity->GetComponent(Component::MISSILEQUEUE));
         PositionComponent* mc = dynamic_cast<PositionComponent*>(entity->GetComponent(Component::POSITION));
