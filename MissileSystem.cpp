@@ -77,7 +77,13 @@ void MissileSystem::UpdateSpeed(CurrentMissileComponent* cmc){
 
 void MissileSystem::ActivateSpecial(Entity* entity){
     std::cout << "activating" << std::endl;
-    if(entity->HasComponent(Component::MISSILE2)){
+    if (entity->HasComponent(Component::MISSILE1)){
+        CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
+        cmc->yVelocity = -700;
+        cmc->xVelocity = -700;
+        cmc->SpecialActivated = true;
+    }
+    else if(entity->HasComponent(Component::MISSILE2)){
         CurrentMissileComponent* cmc = dynamic_cast<CurrentMissileComponent*>(entity->GetComponent(Component::CURRENTMISSILE));
         cmc->yVelocity = 0;
         cmc->xVelocity = 1400;
@@ -89,4 +95,5 @@ void MissileSystem::ActivateSpecial(Entity* entity){
         cmc->xVelocity = 0;
         cmc->SpecialActivated = true;
     }
+    
 }
