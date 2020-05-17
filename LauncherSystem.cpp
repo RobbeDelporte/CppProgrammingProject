@@ -44,6 +44,10 @@ void LauncherSystem::Update(){
             }
             //REPLAY CASE
             else{
+                if(engine_->GetContext().missiles.size() == 0){
+                    std::cerr << "Replay failed: likely because of a desync between the replay and the original game. The highscorefile might be invalid" << std::endl;
+                    exit(1);
+                }
                 std::string s = engine_->GetContext().missiles[0];
                 engine_->GetContext().missiles.erase(engine_->GetContext().missiles.begin());
                 if(s == std::string("START")){
