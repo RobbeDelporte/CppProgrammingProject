@@ -13,6 +13,9 @@ archived here as-is; the code is preserved as it was at the end of the course.
 > setup with a portable `Makefile` so it builds and runs from the command line
 > on any Linux distribution (and on Windows via WSL).
 
+
+<img width="900" height="450" alt="image" src="https://github.com/user-attachments/assets/21f843ad-2495-4b1e-8be4-1bdf257620f2" />
+
 ## Gameplay
 
 - Pick a level from the menu (three handcrafted levels are included).
